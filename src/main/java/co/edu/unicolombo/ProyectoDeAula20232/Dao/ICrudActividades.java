@@ -5,7 +5,9 @@ import co.edu.unicolombo.ProyectoDeAula20232.Models.Actividades;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ICrudActividades extends JpaRepository<Actividades, Integer>{
     
     @Query("SELECT a FROM Actividades a WHERE a.estado = 'Activo'")
