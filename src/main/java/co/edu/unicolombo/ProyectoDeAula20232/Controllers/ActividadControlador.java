@@ -2,8 +2,10 @@
 package co.edu.unicolombo.ProyectoDeAula20232.Controllers;
 
 import co.edu.unicolombo.ProyectoDeAula20232.Models.Actividades;
+import co.edu.unicolombo.ProyectoDeAula20232.Models.Usuarios;
 import co.edu.unicolombo.ProyectoDeAula20232.Services.IActividadServicios;
 import java.util.List;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +25,13 @@ public class ActividadControlador {
     IActividadServicios activiyService;
     
     @GetMapping("/Actividades")
-    public String listarActividades(Model modelo, @Param("palabra")String palabra){
+    public String listarActividades(Model modelo, @Param("palabra")String palabra,HttpSession session){
         List<Actividades> listaActividad = (List<Actividades>)activiyService.listarActividades(palabra);
+        Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
+        if(logueado == null){
+            return "redirect:/login";
+        }
+        modelo.addAttribute("usuario", logueado);
         modelo.addAttribute("actividades", listaActividad);
         modelo.addAttribute("palabra", palabra);
         log.info("Ejecuntando el controlador listar Actividades");
@@ -32,7 +39,12 @@ public class ActividadControlador {
     }
     
     @GetMapping("/RegistrarActividad")
-    public String MostrarFormularioActividades(Model modelo){
+    public String MostrarFormularioActividades(Model modelo,HttpSession session){
+        Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
+        if(logueado == null){
+            return "redirect:/login";
+        }
+        modelo.addAttribute("usuario", logueado);
         modelo.addAttribute("actividad", new Actividades());
         return "Actividades/FormularioActividades";
     }
@@ -50,7 +62,12 @@ public class ActividadControlador {
     }
     
     @GetMapping("/EditarActividad/{idActividad}")
-    public String editarActividad(Actividades actividad, Model modelo){
+    public String editarActividad(Actividades actividad, Model modelo,HttpSession session){
+        Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
+        if(logueado == null){
+            return "redirect:/login";
+        }
+        modelo.addAttribute("usuario", logueado);
         actividad = activiyService.buscarActividad(actividad);
         modelo.addAttribute("actividad", actividad);
         return "Actividades/FormularioActividades";

@@ -28,7 +28,7 @@ public class Usuarios implements Serializable{
     @NotEmpty
     private int idUsuario;
     
-    @Column(name = "cedula")
+    @Column(name = "cedula", unique = true)
     @NotEmpty
     private String cedula;
     

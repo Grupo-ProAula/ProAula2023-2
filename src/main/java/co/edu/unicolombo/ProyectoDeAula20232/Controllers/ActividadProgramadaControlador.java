@@ -2,9 +2,11 @@
 package co.edu.unicolombo.ProyectoDeAula20232.Controllers;
 
 import co.edu.unicolombo.ProyectoDeAula20232.Models.ActividadesProgramadas;
+import co.edu.unicolombo.ProyectoDeAula20232.Models.Usuarios;
 import co.edu.unicolombo.ProyectoDeAula20232.Services.IActividadProgramadaServicios;
 import co.edu.unicolombo.ProyectoDeAula20232.Services.IActividadServicios;
 import java.util.List;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +29,13 @@ public class ActividadProgramadaControlador {
     IActividadServicios activityService;
         
     @GetMapping("/ActividadesProgramadas")
-    public String listarActividadesProgramadas(Model modelo, @Param("palabra")String palabra){
+    public String listarActividadesProgramadas(Model modelo, @Param("palabra")String palabra, HttpSession session){
         List<ActividadesProgramadas> listaActividades = (List<ActividadesProgramadas>)programActivityService.listarActividadesProgramadas(palabra);
+        Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
+        if(logueado == null){
+            return "redirect:/login";
+        }
+        modelo.addAttribute("usuario", logueado);
         modelo.addAttribute("actividadesProgramadas", listaActividades);
         modelo.addAttribute("palabra", palabra);
         log.info("Ejecuntando el controlador listar Actividades Programadas");
@@ -36,8 +43,13 @@ public class ActividadProgramadaControlador {
     }
     
     @GetMapping("/RegistrarActividadProgramada")
-    public String MostrarFormularioActividadesProgramadas(Model modelo){
+    public String MostrarFormularioActividadesProgramadas(Model modelo, HttpSession session){
         modelo.addAttribute("actividades", activityService.listarActividades(null));
+        Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
+        if(logueado == null){
+            return "redirect:/login";
+        }
+        modelo.addAttribute("usuario", logueado);
         modelo.addAttribute("actividadProgramada", new ActividadesProgramadas());
         return "ActividadesProgramadas/FormularioActividadesProgramadas";
     }
@@ -58,8 +70,13 @@ public class ActividadProgramadaControlador {
     }
     
     @GetMapping("/EditarActividadProgramada/{idActividadProgramada}")
-    public String editarActividadProgramada(ActividadesProgramadas actividad, Model modelo){
+    public String editarActividadProgramada(ActividadesProgramadas actividad, Model modelo, HttpSession session){
         actividad = programActivityService.buscarActividadProgramada(actividad);
+        Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
+        if(logueado == null){
+            return "redirect:/login";
+        }
+        modelo.addAttribute("usuario", logueado);
         modelo.addAttribute("actividades", activityService.listarActividades(null));
         modelo.addAttribute("actividadProgramada", actividad);
         return "ActividadesProgramadas/FormularioActividadesProgramadas";
