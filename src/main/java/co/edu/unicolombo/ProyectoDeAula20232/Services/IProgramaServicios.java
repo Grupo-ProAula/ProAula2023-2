@@ -14,5 +14,5 @@ public interface IProgramaServicios {
     
     public Programas buscarPrograma(Programas program);
     
-        
+    public List<Programas> listarProgramasDisponibles();
 }

@@ -49,8 +49,8 @@
                                 <td th:text="${ap.actividad.nombre}" class="text-center"></td>
                                 <td th:text="${ap.actividad.tipo}" class="text-center"></td>
                                 <td th:text="${ap.periodo}" class="text-center"></td>
-                                <td th:text="${ap.fechaInicio}" class="text-center"></td>
-                                <td th:text="${ap.fechaFin}" class="text-center"></td>
+                                <td th:text="${#dates.format(ap.fechaInicio,'yyyy-MM-dd')}" class="text-center"></td>
+                                <td th:text="${#dates.format(ap.fechaFin,'yyyy-MM-dd')}" class="text-center"></td>
                                 <td th:text="${ap.estado}" class="text-center"></td>
                                 <td class="text-center">
                                     <a class="btn btn-success">HORARIOS</a>
