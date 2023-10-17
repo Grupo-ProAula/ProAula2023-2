@@ -14,7 +14,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,7 +43,6 @@ public class EstudianteControlador {
         return "Estudiantes/ListaEstudiantes";
     }
     
-    
     @GetMapping("/RegistrarEstudiante")
     public String registarEstudiante(Model modelo, HttpSession session){
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
@@ -59,25 +57,38 @@ public class EstudianteControlador {
     }
     
     @PostMapping("/GuardarEstudiante")
-    public String guardarEstudiante(@Valid @ModelAttribute Estudiantes estudiante , Errors errores, Model modelo, RedirectAttributes atributos){
-        if(errores.hasErrors()){
-            modelo.addAttribute("estudiante", new Estudiantes());
-            modelo.addAttribute("programas", programService.listarProgramas(null));
-            atributos.addFlashAttribute("danger", "Ha Ocurrido Un Error");
-            return "Estudiantes/FormularioEstudiantes";
-        }
+    public String guardarEstudiante(@Valid @ModelAttribute Estudiantes estudiante, Model modelo, RedirectAttributes atributos, HttpSession session){
         estudiante.setEstado("Activo");
         estudiante.setTipo("Estudiante");
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String password = encoder.encode(estudiante.getPassword());
         estudiante.setPassword(password);
-        if(estudiante.getIdUsuario() == 0){
-            studentService.guardarEstudiante(estudiante);
-            atributos.addFlashAttribute("success", "Estudiante Registrado Exitosamente");
-        }else{
-            studentService.guardarEstudiante(estudiante);
-            atributos.addFlashAttribute("success", "Estudiante Modificado Exitosamente");
+        Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
+        if(logueado == null){
+            return "redirect:/login";
         }
+        try{
+            if(estudiante.getIdUsuario() == 0){
+                studentService.guardarEstudiante(estudiante);
+                atributos.addFlashAttribute("success", "Estudiante Registrado Exitosamente");
+            }else{
+                studentService.guardarEstudiante(estudiante);
+                atributos.addFlashAttribute("success", "Estudiante Modificado Exitosamente");
+            }
+        }catch(Exception ex){
+            String mensaje="";
+            if(ex.getMessage().contains("ConstraintViolationException")){
+                mensaje="La Cedula Ingresada Ya Existe";
+            }else{
+                mensaje= ex.getMessage();
+            }
+            modelo.addAttribute("usuario", logueado);
+            modelo.addAttribute("danger", ""+mensaje);
+            modelo.addAttribute("estudiante", estudiante);
+            modelo.addAttribute("programas", programService.listarProgramas(null));
+            return "Estudiantes/FormularioEstudiantes";
+        }
+        
         return "redirect:/Estudiantes";
     }
     

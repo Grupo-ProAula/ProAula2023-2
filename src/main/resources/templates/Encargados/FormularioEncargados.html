@@ -8,20 +8,20 @@
             <div class="row">
                 <div class="col-md-12"><br>
                     <div class="col-md-3" style="margin-left: 15px">
-                        <a class="btn btn-primary" th:href="@{/Estudiantes}">
+                        <a class="btn btn-primary" th:href="@{/Encargados}">
                             Regresar
                         </a>
                     </div>
                     <center>
-                        <h3 th:if="${estudiante.idUsuario == 0}">Registrar Estudiante</h3>
-                        <h3 th:unless="${estudiante.idUsuario == 0}">Modificar Estudiante</h3>
+                        <h3 th:if="${encargado.idUsuario == 0}">Registrar Encargado</h3>
+                        <h3 th:unless="${encargado.idUsuario == 0}">Modificar Encargado</h3>
                     </center>
                     <div class="row">
                         <div class="col-md-2">
                             
                         </div>
                         <div class="col-md-8">
-                            <form th:action="@{/GuardarEstudiante}" method="POST" th:object="${estudiante}">
+                            <form th:action="@{/GuardarEncargado}" method="POST" th:object="${encargado}">
                                 <div class="form-group" style="margin-bottom: 1px">
                                     <input type="hidden" class="form-control" name="idUsuario" id="idUsuario" th:field="*{idUsuario}"/>
                                 </div>
@@ -30,12 +30,6 @@
                                         Cedula
                                     </label>
                                     <input type="text" class="form-control" name="cedula" id="cedula" placeholder="Cedula" th:field="*{cedula}" required />
-                                </div>
-                                <div class="form-group" style="margin-bottom: 1px">
-                                    <label for="codigoEstudiantil" style="margin: 0px">
-                                        Codigo Estudiantil
-                                    </label>
-                                    <input type="text" class="form-control" name="codigoEstudiantil" id="codigoEstudiantil" placeholder="Codigo Estudiantil" th:field="*{codigoEstudiantil}" required />
                                 </div>
                                 <div class="form-group" style="margin-bottom: 1px">
                                     <label for="nombre" style="margin: 0px">
@@ -62,31 +56,21 @@
                                     <input type="number" class="form-control" name="telefono" id="telefono" placeholder="Telefono" th:field="*{telefono}" required/>
                                 </div>
                                 <div class="form-group" style="margin-bottom: 1px">
-                                    <label for="programa" style="margin: 0px">
-                                        Programa
+                                    <label for="cargo" style="margin: 0px">
+                                        Cargo
                                     </label>
-                                    <select class="form-control" name="programa" id="programa" required th:field="*{programa}" >
-                                        <div th:each="p: ${programas}">
-                                            <option th:value="${p.idPrograma}" th:text="${p.nombre}"></option>
-                                        </div>
-                                    </select>
+                                    <input type="text" class="form-control" name="cargo" id="cargo" placeholder="Cargo" th:field="*{cargo}" required/>
                                 </div>
-                                <div class="form-group" style="margin-bottom: 1px">
-                                    <label for="semestre" style="margin: 0px">
-                                        Semestre
-                                    </label>
-                                    <input type="number" class="form-control" name="semestre" id="semestre" th:field="*{semestre}" required/>
-                                </div>
-                                <div class="form-group" style="margin-bottom: 7px" th:if="${estudiante.idUsuario == 0}">
+                                <div class="form-group" style="margin-bottom: 7px" th:if="${encargado.idUsuario == 0}">
                                     <label for="contraseña" style="margin: 0px">
                                         Contraseña
                                     </label>
                                     <input type="password" class="form-control" name="contraseña" id="contraseña" placeholder="Contraseña" th:field="*{password}" required/>
                                 </div><br>
-                                <button type="submit" class="btn btn-primary" th:if="${estudiante.idUsuario == 0}">
+                                <button type="submit" class="btn btn-primary" th:if="${encargado.idUsuario == 0}">
                                     Registrar
                                 </button>
-                                <button type="submit" class="btn btn-primary" th:unless="${estudiante.idUsuario == 0}">
+                                <button type="submit" class="btn btn-primary" th:unless="${encargado.idUsuario == 0}">
                                     Modificar
                                 </button>
                                 <button type="reset" class="btn btn-danger">

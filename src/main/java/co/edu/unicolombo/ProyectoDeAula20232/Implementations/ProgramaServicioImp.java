@@ -36,5 +36,10 @@ public class ProgramaServicioImp implements IProgramaServicios{
     public Programas buscarPrograma(Programas program) {
         return crudPrograma.findById(program.getIdPrograma()).orElse(null);
     }
+
+    @Override
+    public List<Programas> listarProgramasDisponibles() {
+        return crudPrograma.listarProgramasDisponibles();
+    }
     
 }

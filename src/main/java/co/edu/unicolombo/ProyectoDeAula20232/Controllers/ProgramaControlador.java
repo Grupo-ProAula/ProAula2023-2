@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -50,19 +49,31 @@ public class ProgramaControlador {
     }
     
     @PostMapping("/GuardarPrograma")
-    public String guardarPrograma(@Valid Programas programa , Errors errores, Model modelo, RedirectAttributes atributos){
-        if(errores.hasErrors()){
-            modelo.addAttribute("programa", new Programas());
-            atributos.addFlashAttribute("danger", "Ha Ocurrido Un Error");
-            return "Programas/FormularioProgramas";
-        }
+    public String guardarPrograma(@Valid Programas programa, Model modelo, RedirectAttributes atributos, HttpSession session){
         programa.setEstado("Activo");
-        if(programa.getIdPrograma() == 0){
-            programService.guardarPrograma(programa);
-            atributos.addFlashAttribute("success", "Programa Registrado Exitosamente");
-        }else{
-            programService.guardarPrograma(programa);
-            atributos.addFlashAttribute("success", "Programa Modificado Exitosamente");
+        Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
+        if(logueado == null){
+            return "redirect:/login";
+        }
+        try{
+            if(programa.getIdPrograma() == 0){
+                programService.guardarPrograma(programa);
+                atributos.addFlashAttribute("success", "Programa Registrado Exitosamente");
+            }else{
+                programService.guardarPrograma(programa);
+                atributos.addFlashAttribute("success", "Programa Modificado Exitosamente");
+            }
+        }catch(Exception ex){
+            String mensaje="";
+            if(ex.getMessage().contains("ConstraintViolationException")){
+                mensaje="Hubo Un Error";
+            }else{
+                mensaje= ex.getMessage();
+            }
+            modelo.addAttribute("usuario", logueado);
+            modelo.addAttribute("danger", ""+mensaje);
+            modelo.addAttribute("programa", programa);
+            return "Programas/FormularioProgramas";
         }
         return "redirect:/Programas";
     }

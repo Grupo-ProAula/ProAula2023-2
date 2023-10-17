@@ -28,36 +28,36 @@ public class Usuarios implements Serializable{
     @NotEmpty
     private int idUsuario;
     
-    @Column(name = "cedula", unique = true)
+    @Column(name = "cedula", unique = true, nullable = false)
     @NotEmpty
     private String cedula;
     
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false)
     @NotEmpty
     private String nombre;
     
-    @Column(name = "apellidos")
+    @Column(name = "apellidos", nullable = false)
     @NotEmpty
     private String apellidos;
     
-    @Column(name = "correo")
+    @Column(name = "correo", nullable = false)
     @Email
     @NotEmpty
     private String correo;
     
-    @Column(name = "telefono")
+    @Column(name = "telefono", nullable = false)
     @NotEmpty
     private String telefono;
     
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     @NotEmpty
     private String password;
     
-    @Column(name = "estado")
+    @Column(name = "estado", nullable = false)
     @NotEmpty
     private String estado;
     
-    @Column(name = "tipo")
+    @Column(name = "tipo", nullable = false)
     @NotEmpty
     private String tipo;
 }
