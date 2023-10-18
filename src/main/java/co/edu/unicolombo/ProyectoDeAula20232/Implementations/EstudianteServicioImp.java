@@ -33,8 +33,13 @@ public class EstudianteServicioImp implements IEstudianteServicios{
     }
 
     @Override
-    public Estudiantes buscarEstudiante(Estudiantes student) {
-        return crudEstudiante.findById(student.getIdUsuario()).orElse(null);
+    public Estudiantes buscarEstudiante(Integer id) {
+        return crudEstudiante.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Estudiantes> listarEstudiantesPrograma(int idPrograma) {
+        return crudEstudiante.listarEstudiantesPrograma(idPrograma);
     }
     
 }

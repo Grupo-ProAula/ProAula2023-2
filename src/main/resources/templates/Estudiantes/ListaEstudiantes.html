@@ -10,8 +10,22 @@
                     <center>
                         <h3>Modulo De Estudiantes</h3>
                     </center>
-		<div class="row">
-                    <div class="col-md-3">	
+                <div class="row" th:if="${usuario.tipo != 'Administrador'}">
+                    <div class="col-md-12">
+                        <form role="form" th:action="@{/Estudiantes}">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="palabra" id="palabra" placeholder="Buscar Por Nombre"/> 
+                                <div class="input-group-append" style="margin-left: 10px" >
+                                    <button class="btn btn-primary" type="submit" style="padding: 0px 20px">
+                                        Buscar
+                                    </button>
+                                </div>    
+                            </div>
+                        </form>
+                    </div><br><br>
+                </div>
+		<div class="row" th:if="${usuario.tipo == 'Administrador'}">
+                    <div class="col-md-3" >	
                         <a class="btn btn-block btn-primary" th:href="@{/RegistrarEstudiante}">
                             Registrar Estudiante
                         </a>
@@ -41,7 +55,7 @@
                                 <th class="text-center">TELEFONO</th>
                                 <th class="text-center">PROGRAMA</th>
                                 <th class="text-center">SEMESTRE</th>
-                                <th class="text-center">ACCIONES</th>
+                                <th class="text-center" th:if="${usuario.tipo == 'Administrador'}">ACCIONES</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -54,7 +68,7 @@
                                 <td th:text="${e.telefono}" class="text-center"></td>
                                 <td th:text="${e.programa.nombre}" class="text-center"></td>
                                 <td th:text="${e.semestre}" class="text-center"></td>
-                                <th class="text-center">
+                                <th class="text-center" th:if="${usuario.tipo == 'Administrador'}">
                                     <a class="btn btn-info" th:href="@{/EditarEstudiante/}+${e.idUsuario}">EDITAR</a>
                                     <a class="btn btn-danger" th:onclick="eliminar([[${e.idUsuario}]],'/EliminarEstudiante/','/Estudiantes')">ELIMINAR</a>
                                 </th>

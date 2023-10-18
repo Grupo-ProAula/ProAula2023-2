@@ -31,31 +31,25 @@
                                         <a class="nav-link" th:href="@{/}">Inicio</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/Estudiantes}">Estudiantes</a>
+                                        <a class="nav-link" th:if="${usuario.tipo == 'Administrador'} OR ${usuario.tipo == 'Coordinador'} OR ${usuario.tipo == 'Encargado'}" th:href="@{/Estudiantes}">Estudiantes</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/Encargados}">Encargados</a>
+                                        <a class="nav-link" th:if="${usuario.tipo == 'Administrador'}" th:href="@{/Encargados}">Encargados</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/Coordinadores}">Coordinadores</a>
+                                        <a class="nav-link" th:if="${usuario.tipo == 'Administrador'}" th:href="@{/Coordinadores}">Coordinadores</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/}">Administradores</a>
+                                        <a class="nav-link" th:if="${usuario.tipo == 'Administrador'}" th:href="@{/}">Administradores</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/Programas}">Programas</a>
+                                        <a class="nav-link" th:if="${usuario.tipo == 'Administrador'}" th:href="@{/Programas}">Programas</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" th:href="@{/Actividades}">Actividades</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" th:href="@{/ActividadesProgramadas}">Programar</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/}">Participantes</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/}">Asistencias</a>
                                     </li>
 				</ul>
 				<ul class="navbar-nav ml-md-auto">
@@ -64,7 +58,7 @@
                                             <th th:text="${usuario.nombre}+' '+${usuario.apellidos}"></th>
                                         </a>
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-					<a class="dropdown-item" href="#">Configuracion</a> 
+					<a class="dropdown-item" th:href="@{/Configuracion/}+${usuario.idUsuario}">Configuracion</a> 
                                             <div class="dropdown-divider"></div> 
                                         <a class="dropdown-item" th:href="@{/logout}">Cerrar Sesion</a>
 					</div>

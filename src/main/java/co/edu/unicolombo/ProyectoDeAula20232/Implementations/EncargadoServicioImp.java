@@ -33,8 +33,8 @@ public class EncargadoServicioImp implements IEncargadoServicios{
     }
 
     @Override
-    public Encargados buscarEncargado(Encargados encargado) {
-        return crudEncargado.findById(encargado.getIdUsuario()).orElse(null);
+    public Encargados buscarEncargado(Integer id) {
+        return crudEncargado.findById(id).orElse(null);
     }
     
 }

@@ -12,5 +12,7 @@ public interface IEstudianteServicios {
     
     public void eliminarEstudiante(Estudiantes student);
     
-    public Estudiantes buscarEstudiante(Estudiantes student);
+    public Estudiantes buscarEstudiante(Integer id);
+    
+    public List<Estudiantes> listarEstudiantesPrograma(int idPrograma);
 }

@@ -18,4 +18,7 @@ public interface ICrudProgramas extends JpaRepository<Programas, Integer>{
     
     @Query("SELECT p FROM Programas p WHERE p.idPrograma NOT IN (SELECT c.programa.idPrograma FROM Coordinadores c WHERE c.estado = 'Activo')")
     public List<Programas> listarProgramasDisponibles();
+    
+    @Query("SELECT p FROM Programas p WHERE p.idPrograma NOT IN (SELECT c.programa.idPrograma FROM Coordinadores c WHERE c.estado = 'Activo' AND c.idUsuario <> ?1)")
+    public List<Programas> listarProgramasDisponibles(int id);
 }

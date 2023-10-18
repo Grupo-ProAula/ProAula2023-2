@@ -1,10 +1,13 @@
 
 package co.edu.unicolombo.ProyectoDeAula20232.Controllers;
 
+import co.edu.unicolombo.ProyectoDeAula20232.Models.Coordinadores;
 import co.edu.unicolombo.ProyectoDeAula20232.Models.Estudiantes;
 import co.edu.unicolombo.ProyectoDeAula20232.Models.Usuarios;
+import co.edu.unicolombo.ProyectoDeAula20232.Services.ICoordinadoresServicios;
 import co.edu.unicolombo.ProyectoDeAula20232.Services.IEstudianteServicios;
 import co.edu.unicolombo.ProyectoDeAula20232.Services.IProgramaServicios;
+import co.edu.unicolombo.ProyectoDeAula20232.Services.IUsuarioServicios;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -24,6 +27,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class EstudianteControlador {
     
     @Autowired
+    ICoordinadoresServicios coordinadorService;
+    
+    @Autowired
+    IUsuarioServicios userService;
+    
+    @Autowired
     IEstudianteServicios studentService;
     
     @Autowired
@@ -35,6 +44,13 @@ public class EstudianteControlador {
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
         if(logueado == null){
             return "redirect:/login";
+        }
+        if(logueado.getTipo().equals("Estudiante")){
+            return "redirect:/";
+        }
+        if(logueado.getTipo().equals("Coordinador")){
+            Coordinadores c = coordinadorService.buscarCoordinador(logueado.getIdUsuario());
+            listaEstudiantes = studentService.listarEstudiantesPrograma(c.getPrograma().getIdPrograma());
         }
         modelo.addAttribute("usuario", logueado);
         modelo.addAttribute("estudiantes", listaEstudiantes);
@@ -48,6 +64,9 @@ public class EstudianteControlador {
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
         if(logueado == null){
             return "redirect:/login";
+        }
+        if(!logueado.getTipo().equals("Administrador")){
+            return "redirect:/";
         }
         modelo.addAttribute("usuario", logueado);
         modelo.addAttribute("estudiante", new Estudiantes());
@@ -68,12 +87,18 @@ public class EstudianteControlador {
             return "redirect:/login";
         }
         try{
+            studentService.guardarEstudiante(estudiante);
             if(estudiante.getIdUsuario() == 0){
-                studentService.guardarEstudiante(estudiante);
                 atributos.addFlashAttribute("success", "Estudiante Registrado Exitosamente");
             }else{
-                studentService.guardarEstudiante(estudiante);
-                atributos.addFlashAttribute("success", "Estudiante Modificado Exitosamente");
+                if(estudiante.getIdUsuario() == logueado.getIdUsuario()){
+                    Usuarios user = userService.buscarUsuario(estudiante.getIdUsuario());
+                    session.setAttribute("usuario.session", user);
+                    atributos.addFlashAttribute("success", "Datos Modificados Exitosamente");
+                    return "redirect:/";
+                }else{
+                    atributos.addFlashAttribute("success", "Estudiante Modificado Exitosamente");
+                }
             }
         }catch(Exception ex){
             String mensaje="";
@@ -88,16 +113,18 @@ public class EstudianteControlador {
             modelo.addAttribute("programas", programService.listarProgramas(null));
             return "Estudiantes/FormularioEstudiantes";
         }
-        
         return "redirect:/Estudiantes";
     }
     
     @GetMapping("/EditarEstudiante/{idUsuario}")
     public String editarEstudiante(Estudiantes estudiante, Model modelo, HttpSession session){
-        estudiante = studentService.buscarEstudiante(estudiante);
+        estudiante = studentService.buscarEstudiante(estudiante.getIdUsuario());
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
         if(logueado == null){
             return "redirect:/login";
+        }
+        if(logueado.getTipo().equals("Coordinador") || logueado.getTipo().equals("Encargado")){
+            return "redirect:/";
         }
         modelo.addAttribute("usuario", logueado);
         modelo.addAttribute("programas", programService.listarProgramas(null));
@@ -107,7 +134,7 @@ public class EstudianteControlador {
     
     @GetMapping("/EliminarEstudiante/{idUsuario}")
     public String eliminarEstudiante(Estudiantes estudiante, RedirectAttributes atributos){
-        Estudiantes e = studentService.buscarEstudiante(estudiante);
+        Estudiantes e = studentService.buscarEstudiante(estudiante.getIdUsuario());
         e.setEstado("Eliminado");
         studentService.guardarEstudiante(e);
         atributos.addFlashAttribute("warning", "Estudiante Eliminado");

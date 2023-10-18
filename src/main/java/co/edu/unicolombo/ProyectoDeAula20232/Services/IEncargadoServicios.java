@@ -12,5 +12,5 @@ public interface IEncargadoServicios {
     
     public void eliminarEncargado(Encargados encargado);
     
-    public Encargados buscarEncargado(Encargados encargado);
+    public Encargados buscarEncargado(Integer id);
 }
