@@ -38,7 +38,10 @@ public class ProgramaServicioImp implements IProgramaServicios{
     }
 
     @Override
-    public List<Programas> listarProgramasDisponibles() {
+    public List<Programas> listarProgramasDisponibles(int idCoordinador) {
+        if(idCoordinador != 0){
+            return crudPrograma.listarProgramasDisponibles(idCoordinador);
+        }
         return crudPrograma.listarProgramasDisponibles();
     }
     

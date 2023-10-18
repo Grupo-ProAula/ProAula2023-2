@@ -12,5 +12,5 @@ public interface IUsuarioServicios{
     
     public void eliminarUsuario(Usuarios user);
     
-    public Usuarios buscarUsuario(Usuarios user);
+    public Usuarios buscarUsuario(Integer id);
 }

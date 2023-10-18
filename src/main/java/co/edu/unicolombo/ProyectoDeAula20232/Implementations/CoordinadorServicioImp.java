@@ -33,8 +33,8 @@ public class CoordinadorServicioImp implements ICoordinadoresServicios{
     }
 
     @Override
-    public Coordinadores buscarCoordinador(Coordinadores coordinador) {
-        return crudCoordinador.findById(coordinador.getIdUsuario()).orElse(null);
+    public Coordinadores buscarCoordinador(Integer id) {
+        return crudCoordinador.findById(id).orElse(null);
     }
     
 }

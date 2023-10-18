@@ -4,6 +4,7 @@ package co.edu.unicolombo.ProyectoDeAula20232.Controllers;
 import co.edu.unicolombo.ProyectoDeAula20232.Models.Encargados;
 import co.edu.unicolombo.ProyectoDeAula20232.Models.Usuarios;
 import co.edu.unicolombo.ProyectoDeAula20232.Services.IEncargadoServicios;
+import co.edu.unicolombo.ProyectoDeAula20232.Services.IUsuarioServicios;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -23,6 +24,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class EncargadoControlador {
     
     @Autowired
+    IUsuarioServicios userService;
+    
+    @Autowired
     IEncargadoServicios encargadoService;
     
     @GetMapping("/Encargados")
@@ -31,6 +35,9 @@ public class EncargadoControlador {
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
         if(logueado == null){
             return "redirect:/login";
+        }
+        if(!logueado.getTipo().equals("Administrador")){
+            return "redirect:/";
         }
         modelo.addAttribute("usuario", logueado);
         modelo.addAttribute("encargados", listaEncargados);
@@ -45,6 +52,9 @@ public class EncargadoControlador {
         if(logueado == null){
             return "redirect:/login";
         }
+        if(!logueado.getTipo().equals("Administrador")){
+            return "redirect:/";
+        }
         modelo.addAttribute("usuario", logueado);
         modelo.addAttribute("encargado", new Encargados());
         log.info("Ejecuntando el controlador registrar encargado");
@@ -54,7 +64,7 @@ public class EncargadoControlador {
     @PostMapping("/GuardarEncargado")
     public String guardarEncargado(@Valid @ModelAttribute Encargados encargado, Model modelo, RedirectAttributes atributos, HttpSession session){
         encargado.setEstado("Activo");
-        encargado.setTipo("Estudiante");
+        encargado.setTipo("Encargado");
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String password = encoder.encode(encargado.getPassword());
         encargado.setPassword(password);
@@ -63,11 +73,16 @@ public class EncargadoControlador {
             return "redirect:/login";
         }
         try{
+            encargadoService.guardarEncargado(encargado);
             if(encargado.getIdUsuario() == 0){
-                encargadoService.guardarEncargado(encargado);
                 atributos.addFlashAttribute("success", "Encargado Registrado Exitosamente");
             }else{
-                encargadoService.guardarEncargado(encargado);
+                if(encargado.getIdUsuario() == logueado.getIdUsuario()){
+                    Usuarios user = userService.buscarUsuario(encargado.getIdUsuario());
+                    session.setAttribute("usuario.session", user);
+                    atributos.addFlashAttribute("success", "Datos Modificados Exitosamente");
+                    return "redirect:/";
+                }
                 atributos.addFlashAttribute("success", "Encargado Modificado Exitosamente");
             }
         }catch(Exception ex){
@@ -87,10 +102,13 @@ public class EncargadoControlador {
     
     @GetMapping("/EditarEncargado/{idUsuario}")
     public String editarEncargado(Encargados encargado, Model modelo, HttpSession session){
-        encargado = encargadoService.buscarEncargado(encargado);
+        encargado = encargadoService.buscarEncargado(encargado.getIdUsuario());
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
         if(logueado == null){
             return "redirect:/login";
+        }
+        if(logueado.getTipo().equals("Coordinador") || logueado.getTipo().equals("Estudiante")){
+            return "redirect:/";
         }
         modelo.addAttribute("usuario", logueado);
         modelo.addAttribute("encargado", encargado);
@@ -99,7 +117,7 @@ public class EncargadoControlador {
     
     @GetMapping("/EliminarEncargado/{idUsuario}")
     public String eliminarEncargado(Encargados encargado, RedirectAttributes atributos){
-        Encargados e = encargadoService.buscarEncargado(encargado);
+        Encargados e = encargadoService.buscarEncargado(encargado.getIdUsuario());
         e.setEstado("Eliminado");
         encargadoService.guardarEncargado(e);
         atributos.addFlashAttribute("warning", "Encargado Eliminado");

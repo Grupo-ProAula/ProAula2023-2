@@ -12,5 +12,5 @@ public interface ICoordinadoresServicios {
     
     public void eliminarCoordinador(Coordinadores coordinador);
     
-    public Coordinadores buscarCoordinador(Coordinadores coordinador);
+    public Coordinadores buscarCoordinador(Integer id);
 }

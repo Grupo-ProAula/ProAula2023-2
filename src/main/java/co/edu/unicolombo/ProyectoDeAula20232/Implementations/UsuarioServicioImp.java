@@ -30,8 +30,8 @@ public class UsuarioServicioImp implements IUsuarioServicios{
     }
 
     @Override
-    public Usuarios buscarUsuario(Usuarios user) {
-        return crudUser.findById(user.getIdUsuario()).orElse(null);
+    public Usuarios buscarUsuario(Integer id) {
+        return crudUser.findById(id).orElse(null);
     }
     
 }
