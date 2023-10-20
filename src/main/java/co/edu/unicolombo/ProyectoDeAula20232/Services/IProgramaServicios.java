@@ -14,8 +14,6 @@ public interface IProgramaServicios {
     public void eliminarPrograma(Programas program);
     
     public Programas buscarPrograma(Programas program);
-
-    public void guardarAdministradores(Administradores e);
     
-        
+    public List<Programas> listarProgramasDisponibles(int idCoordinador);
 }

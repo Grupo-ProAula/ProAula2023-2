@@ -15,9 +15,9 @@ import javax.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Entity
-@Data
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "Usuarios", catalog = "ProAula_BD")
+@Data
 public class Usuarios implements Serializable{
     
     private static final long serialVersionUID = 1L;
@@ -28,36 +28,36 @@ public class Usuarios implements Serializable{
     @NotEmpty
     private int idUsuario;
     
-    @Column(name = "cedula")
+    @Column(name = "cedula", unique = true, nullable = false)
     @NotEmpty
     private String cedula;
     
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false)
     @NotEmpty
     private String nombre;
     
-    @Column(name = "apellidos")
+    @Column(name = "apellidos", nullable = false)
     @NotEmpty
     private String apellidos;
     
-    @Column(name = "correo")
+    @Column(name = "correo", nullable = false)
     @Email
     @NotEmpty
     private String correo;
     
-    @Column(name = "telefono")
+    @Column(name = "telefono", nullable = false)
     @NotEmpty
     private String telefono;
     
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     @NotEmpty
     private String password;
     
-    @Column(name = "estado")
+    @Column(name = "estado", nullable = false)
     @NotEmpty
     private String estado;
     
-    @Column(name = "tipo")
+    @Column(name = "tipo", nullable = false)
     @NotEmpty
     private String tipo;
 }

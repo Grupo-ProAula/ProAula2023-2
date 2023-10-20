@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+    <head th:replace="plantillas/partes :: head"></head>
+    <body>
+        <header th:replace="plantillas/partes :: header"></header>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12"><br>
+                    <div class="col-md-3" style="margin-left: 15px">
+                        <a class="btn btn-primary" th:href="@{/Encargados}">
+                            Regresar
+                        </a>
+                    </div>
+                    <center>
+                        <h3 th:if="${encargado.idUsuario == 0}">Registrar Encargado</h3>
+                        <h3 th:unless="${encargado.idUsuario == 0}">Modificar Encargado</h3>
+                    </center>
+                    <div class="row">
+                        <div class="col-md-2">
+                            
+                        </div>
+                        <div class="col-md-8">
+                            <form th:action="@{/GuardarEncargado}" method="POST" th:object="${encargado}">
+                                <div class="form-group" style="margin-bottom: 1px">
+                                    <input type="hidden" class="form-control" name="idUsuario" id="idUsuario" th:field="*{idUsuario}"/>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 1px">
+                                    <label for="cedula" style="margin: 0px">
+                                        Cedula
+                                    </label>
+                                    <input type="text" class="form-control" name="cedula" id="cedula" placeholder="Cedula" th:field="*{cedula}" required />
+                                </div>
+                                <div class="form-group" style="margin-bottom: 1px">
+                                    <label for="nombre" style="margin: 0px">
+                                        Nombre
+                                    </label>
+                                    <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre" th:field="*{nombre}" required/>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 1px">
+                                    <label for="apellidos" style="margin: 0px">
+                                        Apellidos
+                                    </label>
+                                    <input type="text" class="form-control" name="apellidos" id="apellidos" placeholder="Apellidos" th:field="*{apellidos}" required/>   
+                                </div>
+                                <div class="form-group" style="margin-bottom: 1px">
+                                    <label for="correo" style="margin: 0px">
+                                        Correo
+                                    </label>
+                                    <input type="email" class="form-control" name="correo" id="correo" placeholder="Correo" th:field="*{correo}" required/>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 1px">
+                                    <label for="telefono" style="margin: 0px">
+                                        Telefono
+                                    </label>
+                                    <input type="number" class="form-control" name="telefono" id="telefono" placeholder="Telefono" th:field="*{telefono}" required/>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 1px">
+                                    <label for="cargo" style="margin: 0px">
+                                        Cargo
+                                    </label>
+                                    <input type="text" class="form-control" name="cargo" id="cargo" placeholder="Cargo" th:field="*{cargo}" required/>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 7px">
+                                    <label for="contraseña" style="margin: 0px">
+                                        Contraseña
+                                    </label>
+                                    <input type="password" class="form-control" name="contraseña" id="contraseña" placeholder="Contraseña" th:field="*{password}" required/>
+                                </div><br>
+                                <button type="submit" class="btn btn-primary" th:if="${encargado.idUsuario == 0}">
+                                    Registrar
+                                </button>
+                                <button type="submit" class="btn btn-primary" th:unless="${encargado.idUsuario == 0}">
+                                    Modificar
+                                </button>
+                                <button type="reset" class="btn btn-danger">
+                                    Limpiar
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col-md-2">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

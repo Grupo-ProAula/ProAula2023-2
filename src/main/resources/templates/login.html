@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+    <head th:replace="plantillas/partes :: head"></head>
+    <body style="background-color: #508bfc;">
+        <div class="container-fluid"><br>
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${param.error}">
+                        <strong>Credenciales Incorrectas</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert" th:if="${param.logout}">
+                        <strong>Has Cerrado Sesion</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+            <form th:action="@{/login}" method="post">
+                <div class="container py-5 h-100">
+                  <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                      <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                        <div class="card-body p-5">
+
+                          <h3 class="mb-5 text-center">Iniciar Sesion</h3>
+
+                          <div class="form-outline mb-4">
+                            <label class="form-label" for="typeEmailX-2">Cedula</label>
+                            <input type="text" id="username" name="username" class="form-control form-control-lg" />
+                          </div>
+
+                          <div class="form-outline mb-4">
+                            <label class="form-label" for="typePasswordX-2">Contraseña</label>
+                            <input type="password" id="password" name="password" class="form-control form-control-lg" />
+                          </div>
+                          <input class="btn btn-primary btn-lg btn-block" type="submit" value="Iniciar Sesion"></input>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

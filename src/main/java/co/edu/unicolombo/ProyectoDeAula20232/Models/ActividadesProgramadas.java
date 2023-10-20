@@ -1,6 +1,7 @@
 
 package co.edu.unicolombo.ProyectoDeAula20232.Models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
@@ -29,13 +30,11 @@ public class ActividadesProgramadas implements Serializable{
     @Column(name="periodo", nullable =false, length = 20)
     private String periodo;
     
-    @Column(name="fechaInicio")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Column(name="fechaInicio", nullable = false, columnDefinition = "Date")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date fechaInicio;
     
-    @Column(name="fechaFin")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Column(name="fechaFin", nullable = false, columnDefinition = "Date")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date fechaFin;
     
@@ -43,6 +42,6 @@ public class ActividadesProgramadas implements Serializable{
     private String estado;
     
     @ManyToOne
-    @JoinColumn(name = "idActividad")
+    @JoinColumn(name = "idActividad", nullable = false)
     private Actividades actividad;
 }

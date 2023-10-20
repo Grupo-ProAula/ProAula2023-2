@@ -4,8 +4,8 @@
  */
 package co.edu.unicolombo.ProyectoDeAula20232.Controllers;
 import co.edu.unicolombo.ProyectoDeAula20232.Models.Administradores;
+import co.edu.unicolombo.ProyectoDeAula20232.Models.Usuarios;
 
-import co.edu.unicolombo.ProyectoDeAula20232.Services.IProgramaServicios;
 import java.util.List;
 import javax.validation.Valid;
 
@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import co.edu.unicolombo.ProyectoDeAula20232.Services.IAdministradoresService;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @Slf4j
@@ -31,7 +32,15 @@ public class AdministradoresControlador {
     IAdministradoresService adminService;
     
     @GetMapping("/Administradores")
-    public String listarAdministradores(Model modelo, @Param("palabra")String palabra){
+    public String listarAdministradores(Model modelo, @Param("palabra")String palabra, HttpSession session){
+        Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
+        if(logueado == null){
+            return "redirect:/login";
+        }
+        if(!logueado.getTipo().equals("Administrador")){
+            return "redirect:/";
+        }
+        modelo.addAttribute("usuario", logueado);
         List<Administradores> listaAdministradores = (List<Administradores>)adminService.listarAdministradores(palabra);
         modelo.addAttribute("administradores", listaAdministradores);
         modelo.addAttribute("palabra", palabra);
@@ -41,16 +50,24 @@ public class AdministradoresControlador {
     
     
     @GetMapping("/RegistrarAdministrador")
-    public String RegistrarAdministradores(Model modelo){
+    public String RegistrarAdministradores(Model modelo, HttpSession session){
+        Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
+        if(logueado == null){
+            return "redirect:/login";
+        }
+        if(!logueado.getTipo().equals("Administrador")){
+            return "redirect:/";
+        }
+        modelo.addAttribute("usuario", logueado);
         modelo.addAttribute("administrador", new Administradores());
         log.info("Ejecuntando el controlador registrar estudiante");
         return "Administradores/FormularioAdministradores";
     }
     
     @PostMapping("/GuardarAdministrador")
-    public String guardarAdministradores(@Valid @ModelAttribute Administradores Administradores , Errors errores, Model modelo, RedirectAttributes atributos){
+    public String guardarAdministradores(@Valid @ModelAttribute Administradores Administradores , Model modelo, RedirectAttributes atributos, HttpSession session){
         Administradores.setEstado("Activo");
-        Administradores.setTipo("Administradores");
+        Administradores.setTipo("Administrador");
         if(Administradores.getIdUsuario() == 0){
             adminService.guardarAdministrador(Administradores);
             atributos.addFlashAttribute("success", "Administrador Registrado Exitosamente");
@@ -62,7 +79,15 @@ public class AdministradoresControlador {
     }
     
     @GetMapping("/EditarAdministrador/{idUsuario}")
-    public String editarAdministradores(Administradores administrador, Model modelo){
+    public String editarAdministradores(Administradores administrador, Model modelo, HttpSession session){
+        Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
+        if(logueado == null){
+            return "redirect:/login";
+        }
+        if(logueado.getTipo().equals("Encargado") || logueado.getTipo().equals("Coordinador") || logueado.getTipo().equals("administrador")){
+            return "redirect:/";
+        }
+        modelo.addAttribute("usuario", logueado);
         administrador = adminService.buscarAdministrador(administrador.getIdUsuario());
         modelo.addAttribute("administrador", administrador);
         return "Administradores/FormularioAdministradores";

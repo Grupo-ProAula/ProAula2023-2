@@ -2,7 +2,6 @@
 package co.edu.unicolombo.ProyectoDeAula20232.Implementations;
 
 import co.edu.unicolombo.ProyectoDeAula20232.Dao.ICrudProgramas;
-import co.edu.unicolombo.ProyectoDeAula20232.Models.Administradores;
 import co.edu.unicolombo.ProyectoDeAula20232.Models.Programas;
 import co.edu.unicolombo.ProyectoDeAula20232.Services.IProgramaServicios;
 import java.util.List;
@@ -39,8 +38,13 @@ public class ProgramaServicioImp implements IProgramaServicios{
     }
 
     @Override
-    public void guardarAdministradores(Administradores e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<Programas> listarProgramasDisponibles(int idCoordinador) {
+        if(idCoordinador != 0){
+            return crudPrograma.listarProgramasDisponibles(idCoordinador);
+        }
+        return crudPrograma.listarProgramasDisponibles();
     }
+
+
     
 }

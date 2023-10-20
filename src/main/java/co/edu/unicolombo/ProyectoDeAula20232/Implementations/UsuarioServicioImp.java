@@ -5,8 +5,6 @@ import co.edu.unicolombo.ProyectoDeAula20232.Dao.ICrudUsuario;
 import co.edu.unicolombo.ProyectoDeAula20232.Models.Usuarios;
 import co.edu.unicolombo.ProyectoDeAula20232.Services.IUsuarioServicios;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +16,7 @@ public class UsuarioServicioImp implements IUsuarioServicios{
     
     @Override
     public List<Usuarios> listarUsuarios() {
-        List<Usuarios> listaUsuarios = StreamSupport.stream(this.crudUser.findAll().spliterator(), false).collect(Collectors.toList());
-        return listaUsuarios;
+        return crudUser.findAll();
     }
 
     @Override
@@ -33,8 +30,8 @@ public class UsuarioServicioImp implements IUsuarioServicios{
     }
 
     @Override
-    public Usuarios buscarUsuario(Usuarios user) {
-        return crudUser.findById(user.getCedula()).orElse(null);
+    public Usuarios buscarUsuario(Integer id) {
+        return crudUser.findById(id).orElse(null);
     }
     
 }

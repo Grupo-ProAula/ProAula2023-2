@@ -8,30 +8,16 @@
             <div class="row">
                 <div class="col-md-12"><br>
                     <center>
-                        <h3>Modulo De Estudiantes</h3>
+                        <h3>Modulo De Encargados</h3>
                     </center>
-                <div class="row" th:if="${usuario.tipo != 'Administrador'}">
-                    <div class="col-md-12">
-                        <form role="form" th:action="@{/Estudiantes}">
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="palabra" id="palabra" placeholder="Buscar Por Nombre"/> 
-                                <div class="input-group-append" style="margin-left: 10px" >
-                                    <button class="btn btn-primary" type="submit" style="padding: 0px 20px">
-                                        Buscar
-                                    </button>
-                                </div>    
-                            </div>
-                        </form>
-                    </div><br><br>
-                </div>
-		<div class="row" th:if="${usuario.tipo == 'Administrador'}">
-                    <div class="col-md-3" >	
-                        <a class="btn btn-block btn-primary" th:href="@{/RegistrarEstudiante}">
-                            Registrar Estudiante
+		<div class="row">
+                    <div class="col-md-3">	
+                        <a class="btn btn-block btn-primary" th:href="@{/RegistrarEncargado}">
+                            Registrar Encargado
                         </a>
                     </div><br><br>
                     <div class="col-md-9">
-                        <form role="form" th:action="@{/Estudiantes}">
+                        <form role="form" th:action="@{/Encargados}">
                             <div class="input-group">
                                 <input type="text" class="form-control" name="palabra" id="palabra" placeholder="Buscar Por Nombre"/> 
                                 <div class="input-group-append" style="margin-left: 10px" >
@@ -43,42 +29,38 @@
                         </form>
                     </div>
                 </div>
-                <div th:if="${estudiantes != null and !estudiantes.empty}">
+                <div th:if="${encargados != null and !encargados.empty}">
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr class="bg-primary">
                                 <th class="text-center">CEDULA</th>
-                                <th class="text-center">CODIGO</th>
                                 <th class="text-center">NOMBRE</th>
                                 <th class="text-center">APELLIDOS</th>
                                 <th class="text-center">CORREO</th>
                                 <th class="text-center">TELEFONO</th>
-                                <th class="text-center">PROGRAMA</th>
-                                <th class="text-center">SEMESTRE</th>
-                                <th class="text-center" th:if="${usuario.tipo == 'Administrador'}">ACCIONES</th>
+                                <th class="text-center">CARGO</th>
+                                <th class="text-center">ACCIONES</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="e: ${estudiantes}">
+                            <tr th:each="e: ${encargados}">
                                 <td th:text="${e.cedula}" class="text-center"></td>
-                                <td th:text="${e.codigoEstudiantil}" class="text-center"></td>
                                 <td th:text="${e.nombre}" class="text-center"></td>
                                 <td th:text="${e.apellidos}" class="text-center"></td>
                                 <td th:text="${e.correo}" class="text-center"></td>    
                                 <td th:text="${e.telefono}" class="text-center"></td>
-                                <td th:text="${e.programa.nombre}" class="text-center"></td>
-                                <td th:text="${e.semestre}" class="text-center"></td>
-                                <th class="text-center" th:if="${usuario.tipo == 'Administrador'}">
-                                    <a class="btn btn-info" th:href="@{/EditarEstudiante/}+${e.idUsuario}">EDITAR</a>
-                                    <a class="btn btn-danger" th:onclick="eliminar([[${e.idUsuario}]],'/EliminarEstudiante/','/Estudiantes')">ELIMINAR</a>
+                                <td th:text="${e.cargo}" class="text-center"></td>
+                                <th class="text-center">
+                                    <a class="btn btn-info" th:href="@{/EditarEncargado/}+${e.idUsuario}">EDITAR</a>
+                                    <a class="btn btn-danger" th:onclick="eliminar([[${e.idUsuario}]],'/EliminarEncargado/','/Encargados')">ELIMINAR</a>
                                 </th>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <div th:if="${estudiantes == null or estudiantes.empty}">
+                <div th:if="${encargados == null or encargados.empty}">
                     <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                        <strong>La Lista De Estudiantes Esta Vacia</strong>
+                        <strong>La Lista De Encargados Esta Vacia</strong>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
