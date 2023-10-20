@@ -15,9 +15,9 @@ import javax.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Entity
-@Data
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "Usuarios", catalog = "ProAula_BD")
+@Data
 public class Usuarios implements Serializable{
     
     private static final long serialVersionUID = 1L;
