@@ -29,6 +29,9 @@ public class ProgramaControlador {
         if(logueado == null){
             return "redirect:/login";
         }
+        if(!logueado.getTipo().equals("Administrador")){
+            return "redirect:/";
+        }
         modelo.addAttribute("usuario", logueado);
         modelo.addAttribute("programas", listaProgramas);
         modelo.addAttribute("palabra", palabra);
@@ -42,6 +45,9 @@ public class ProgramaControlador {
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
         if(logueado == null){
             return "redirect:/login";
+        }
+        if(!logueado.getTipo().equals("Administrador")){
+            return "redirect:/";
         }
         modelo.addAttribute("usuario", logueado);
         modelo.addAttribute("programa", p);
@@ -84,6 +90,9 @@ public class ProgramaControlador {
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
         if(logueado == null){
             return "redirect:/login";
+        }
+        if(!logueado.getTipo().equals("Administrador")){
+            return "redirect:/";
         }
         modelo.addAttribute("usuario", logueado);
         modelo.addAttribute("programa", programa);

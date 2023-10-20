@@ -30,6 +30,9 @@ public class ActividadControlador {
         if(logueado == null){
             return "redirect:/login";
         }
+        if(!logueado.getTipo().equals("Administrador")){
+            return "redirect:/";
+        }
         modelo.addAttribute("usuario", logueado);
         modelo.addAttribute("actividades", listaActividad);
         modelo.addAttribute("palabra", palabra);
@@ -42,6 +45,9 @@ public class ActividadControlador {
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
         if(logueado == null){
             return "redirect:/login";
+        }
+        if(!logueado.getTipo().equals("Administrador")){
+            return "redirect:/";
         }
         modelo.addAttribute("usuario", logueado);
         modelo.addAttribute("actividad", new Actividades());
@@ -83,6 +89,9 @@ public class ActividadControlador {
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
         if(logueado == null){
             return "redirect:/login";
+        }
+        if(!logueado.getTipo().equals("Administrador")){
+            return "redirect:/";
         }
         modelo.addAttribute("usuario", logueado);
         actividad = activiyService.buscarActividad(actividad);

@@ -45,7 +45,7 @@ public class EstudianteControlador {
         if(logueado == null){
             return "redirect:/login";
         }
-        if(logueado.getTipo().equals("Estudiante")){
+        if(logueado.getTipo().equals("Estudiante") || logueado.getTipo().equals("Encargado")){
             return "redirect:/";
         }
         if(logueado.getTipo().equals("Coordinador")){
@@ -87,8 +87,9 @@ public class EstudianteControlador {
             return "redirect:/login";
         }
         try{
+            int id = estudiante.getIdUsuario();
             studentService.guardarEstudiante(estudiante);
-            if(estudiante.getIdUsuario() == 0){
+            if(id == 0){
                 atributos.addFlashAttribute("success", "Estudiante Registrado Exitosamente");
             }else{
                 if(estudiante.getIdUsuario() == logueado.getIdUsuario()){

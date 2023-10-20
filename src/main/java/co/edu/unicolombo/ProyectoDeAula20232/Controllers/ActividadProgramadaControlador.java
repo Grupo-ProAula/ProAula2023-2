@@ -5,6 +5,7 @@ import co.edu.unicolombo.ProyectoDeAula20232.Models.ActividadesProgramadas;
 import co.edu.unicolombo.ProyectoDeAula20232.Models.Usuarios;
 import co.edu.unicolombo.ProyectoDeAula20232.Services.IActividadProgramadaServicios;
 import co.edu.unicolombo.ProyectoDeAula20232.Services.IActividadServicios;
+import co.edu.unicolombo.ProyectoDeAula20232.Services.IEncargadoServicios;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.TimeZone;
@@ -28,6 +29,9 @@ public class ActividadProgramadaControlador {
     
     @Autowired
     IActividadServicios activityService;
+    
+    @Autowired
+    IEncargadoServicios encargadoService;
         
     @GetMapping("/ActividadesProgramadas")
     public String listarActividadesProgramadas(Model modelo, @Param("palabra")String palabra, HttpSession session){
@@ -35,6 +39,9 @@ public class ActividadProgramadaControlador {
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
         if(logueado == null){
             return "redirect:/login";
+        }
+        if(logueado.getTipo().equals("Coordinador")){
+            return "redirect:/";
         }
         modelo.addAttribute("usuario", logueado);
         modelo.addAttribute("actividadesProgramadas", listaActividades);
@@ -51,11 +58,15 @@ public class ActividadProgramadaControlador {
     
     @GetMapping("/RegistrarActividadProgramada")
     public String MostrarFormularioActividadesProgramadas(Model modelo, HttpSession session){
-        modelo.addAttribute("actividades", activityService.listarActividades(null));
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
         if(logueado == null){
             return "redirect:/login";
         }
+        if(!logueado.getTipo().equals("Administrador")){
+            return "redirect:/";
+        }
+        modelo.addAttribute("encargados", encargadoService.listarEncargados(null));
+        modelo.addAttribute("actividades", activityService.listarActividades(null));
         modelo.addAttribute("usuario", logueado);
         modelo.addAttribute("actividadProgramada", new ActividadesProgramadas());
         return "ActividadesProgramadas/FormularioActividadesProgramadas";
@@ -71,6 +82,7 @@ public class ActividadProgramadaControlador {
         try{
             if(actividadProgramada.getFechaInicio().after(actividadProgramada.getFechaFin())){
                 modelo.addAttribute("usuario", logueado);
+                modelo.addAttribute("encargados", encargadoService.listarEncargados(null));
                 modelo.addAttribute("actividades", activityService.listarActividades(null));
                 modelo.addAttribute("danger", "La Fecha De Fin No Puede Ser Menor A La De Inicio");
                 modelo.addAttribute("actividadProgramada", actividadProgramada);
@@ -92,6 +104,7 @@ public class ActividadProgramadaControlador {
                 mensaje= ex.getMessage();
             }
             modelo.addAttribute("usuario", logueado);
+            modelo.addAttribute("encargados", encargadoService.listarEncargados(null));
             modelo.addAttribute("actividades", activityService.listarActividades(null));
             modelo.addAttribute("danger", ""+mensaje);
             modelo.addAttribute("actividadProgramada", actividadProgramada);
@@ -107,7 +120,11 @@ public class ActividadProgramadaControlador {
         if(logueado == null){
             return "redirect:/login";
         }
+        if(!logueado.getTipo().equals("Administrador")){
+            return "redirect:/";
+        }
         modelo.addAttribute("usuario", logueado);
+        modelo.addAttribute("encargados", encargadoService.listarEncargados(null));
         modelo.addAttribute("actividades", activityService.listarActividades(null));
         modelo.addAttribute("actividadProgramada", actividad);
         return "ActividadesProgramadas/FormularioActividadesProgramadas";

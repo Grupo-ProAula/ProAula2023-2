@@ -79,8 +79,9 @@ public class CoordinadorControlador {
             return "redirect:/login";
         }
         try{
+            int id = coordinador.getIdUsuario();
             coordinadorService.guardarCoordinador(coordinador);
-            if(coordinador.getIdUsuario() == 0){
+            if(id == 0){
                 atributos.addFlashAttribute("success", "Coordinador Registrado Exitosamente");
             }else{
                 if(coordinador.getIdUsuario() == logueado.getIdUsuario()){

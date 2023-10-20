@@ -73,8 +73,9 @@ public class EncargadoControlador {
             return "redirect:/login";
         }
         try{
+            int id = encargado.getIdUsuario();
             encargadoService.guardarEncargado(encargado);
-            if(encargado.getIdUsuario() == 0){
+            if(id == 0){
                 atributos.addFlashAttribute("success", "Encargado Registrado Exitosamente");
             }else{
                 if(encargado.getIdUsuario() == logueado.getIdUsuario()){

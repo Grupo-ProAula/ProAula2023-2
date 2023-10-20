@@ -31,7 +31,7 @@
                                         <a class="nav-link" th:href="@{/}">Inicio</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" th:if="${usuario.tipo == 'Administrador'} OR ${usuario.tipo == 'Coordinador'} OR ${usuario.tipo == 'Encargado'}" th:href="@{/Estudiantes}">Estudiantes</a>
+                                        <a class="nav-link" th:if="${usuario.tipo == 'Administrador'} OR ${usuario.tipo == 'Coordinador'}" th:href="@{/Estudiantes}">Estudiantes</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" th:if="${usuario.tipo == 'Administrador'}" th:href="@{/Encargados}">Encargados</a>
@@ -46,10 +46,13 @@
                                         <a class="nav-link" th:if="${usuario.tipo == 'Administrador'}" th:href="@{/Programas}">Programas</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/Actividades}">Actividades</a>
+                                        <a class="nav-link" th:if="${usuario.tipo == 'Administrador'}" th:href="@{/Actividades}">Actividades</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/ActividadesProgramadas}">Programar</a>
+                                        <a class="nav-link" th:if="${usuario.tipo == 'Administrador'} OR ${usuario.tipo == 'Encargado'} OR ${usuario.tipo == 'Estudiante'}" th:href="@{/ActividadesProgramadas}">Actividades Programadas</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" th:if="${usuario.tipo == 'Estudiante'}" th:href="@{/ActividadesProgramadas}">Actividades Inscritas</a>
                                     </li>
 				</ul>
 				<ul class="navbar-nav ml-md-auto">

@@ -39,8 +39,9 @@
                                 <th class="text-center">PERIODO</th>
                                 <th class="text-center">FECHA INICIO</th>
                                 <th class="text-center">FECHA FIN</th>
+                                <th class="text-center">ENCARGADO</th>
                                 <th class="text-center">ESTADO</th>
-                                <th class="text-center">ACCIONES </th>
+                                <th class="text-center" th:if="${usuario.tipo == 'Administrador'}">ACCIONES </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -51,8 +52,9 @@
                                 <td th:text="${ap.periodo}" class="text-center"></td>
                                 <td th:text="${#dates.format(ap.fechaInicio,'yyyy-MM-dd')}" class="text-center"></td>
                                 <td th:text="${#dates.format(ap.fechaFin,'yyyy-MM-dd')}" class="text-center"></td>
+                                <td th:text="${ap.encargado.nombre}+' '+${ap.encargado.apellidos}" class="text-center"></td>
                                 <td th:text="${ap.estado}" class="text-center"></td>
-                                <td class="text-center">
+                                <td class="text-center" th:if="${usuario.tipo == 'Administrador'}">
                                     <a class="btn btn-success">HORARIOS</a>
                                     <a class="btn btn-info" th:href="@{/EditarActividadProgramada/}+${ap.idActividadProgramada}">EDITAR</a>
                                     <a class="btn btn-danger" th:onclick="eliminar([[${ap.idActividadProgramada}]],'/EliminarActividadProgramada/','/ActividadesProgramadas')">ELIMINAR</a>
