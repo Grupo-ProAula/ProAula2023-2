@@ -1,10 +1,12 @@
 
 package co.edu.unicolombo.ProyectoDeAula20232.Controllers;
 
+import co.edu.unicolombo.ProyectoDeAula20232.Models.Administradores;
 import co.edu.unicolombo.ProyectoDeAula20232.Models.Coordinadores;
 import co.edu.unicolombo.ProyectoDeAula20232.Models.Encargados;
 import co.edu.unicolombo.ProyectoDeAula20232.Models.Estudiantes;
 import co.edu.unicolombo.ProyectoDeAula20232.Models.Usuarios;
+import co.edu.unicolombo.ProyectoDeAula20232.Services.IAdministradoresService;
 import co.edu.unicolombo.ProyectoDeAula20232.Services.ICoordinadoresServicios;
 import co.edu.unicolombo.ProyectoDeAula20232.Services.IEncargadoServicios;
 import co.edu.unicolombo.ProyectoDeAula20232.Services.IEstudianteServicios;
@@ -35,6 +37,9 @@ public class inicioControlador {
     
     @Autowired
     ICoordinadoresServicios coordinadorService;
+    
+    @Autowired
+    IAdministradoresService adminService;
     
     @GetMapping("/")
     public String inicio(Model modelo, HttpSession session){  
@@ -70,7 +75,10 @@ public class inicioControlador {
             modelo.addAttribute("encargado", encargado);
             return "Encargados/FormularioEncargados";
         }else if(logueado.getTipo().equals("Administrador")){
-            return "index";
+            Administradores administrador = adminService.buscarAdministrador(logueado.getIdUsuario());
+            modelo.addAttribute("usuario", logueado);
+            modelo.addAttribute("administrador", administrador);
+            return "Administradores/FormularioAdministradores";
         }
         return "index";
     }

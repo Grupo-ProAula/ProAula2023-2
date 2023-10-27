@@ -20,10 +20,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @Slf4j
+@RequestMapping("/Estudiantes")
 public class EstudianteControlador {
     
     @Autowired
@@ -38,7 +40,7 @@ public class EstudianteControlador {
     @Autowired
     IProgramaServicios programService;
     
-    @GetMapping("/Estudiantes")
+    @GetMapping("")
     public String listarEstudiantes(Model modelo, @Param("palabra")String palabra, HttpSession session){
         List<Estudiantes> listaEstudiantes = (List<Estudiantes>)studentService.listarEstudiantes(palabra);
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
@@ -50,7 +52,7 @@ public class EstudianteControlador {
         }
         if(logueado.getTipo().equals("Coordinador")){
             Coordinadores c = coordinadorService.buscarCoordinador(logueado.getIdUsuario());
-            listaEstudiantes = studentService.listarEstudiantesPrograma(c.getPrograma().getIdPrograma());
+            listaEstudiantes = studentService.listarEstudiantesPrograma(c.getPrograma().getIdPrograma(), palabra);
         }
         modelo.addAttribute("usuario", logueado);
         modelo.addAttribute("estudiantes", listaEstudiantes);
@@ -59,7 +61,7 @@ public class EstudianteControlador {
         return "Estudiantes/ListaEstudiantes";
     }
     
-    @GetMapping("/RegistrarEstudiante")
+    @GetMapping("/Add")
     public String registarEstudiante(Model modelo, HttpSession session){
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
         if(logueado == null){
@@ -75,7 +77,7 @@ public class EstudianteControlador {
         return "Estudiantes/FormularioEstudiantes";
     }
     
-    @PostMapping("/GuardarEstudiante")
+    @PostMapping("/Save")
     public String guardarEstudiante(@Valid @ModelAttribute Estudiantes estudiante, Model modelo, RedirectAttributes atributos, HttpSession session){
         estudiante.setEstado("Activo");
         estudiante.setTipo("Estudiante");
@@ -117,7 +119,7 @@ public class EstudianteControlador {
         return "redirect:/Estudiantes";
     }
     
-    @GetMapping("/EditarEstudiante/{idUsuario}")
+    @GetMapping("/Edit/{idUsuario}")
     public String editarEstudiante(Estudiantes estudiante, Model modelo, HttpSession session){
         estudiante = studentService.buscarEstudiante(estudiante.getIdUsuario());
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
@@ -133,7 +135,7 @@ public class EstudianteControlador {
         return "Estudiantes/FormularioEstudiantes";
     }
     
-    @GetMapping("/EliminarEstudiante/{idUsuario}")
+    @GetMapping("/Delete/{idUsuario}")
     public String eliminarEstudiante(Estudiantes estudiante, RedirectAttributes atributos){
         Estudiantes e = studentService.buscarEstudiante(estudiante.getIdUsuario());
         e.setEstado("Eliminado");

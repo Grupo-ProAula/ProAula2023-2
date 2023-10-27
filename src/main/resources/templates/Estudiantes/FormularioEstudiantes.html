@@ -21,7 +21,7 @@
                             
                         </div>
                         <div class="col-md-8">
-                            <form th:action="@{/GuardarEstudiante}" method="POST" th:object="${estudiante}">
+                            <form th:action="@{/Estudiantes/Save}" method="POST" th:object="${estudiante}">
                                 <div class="form-group" style="margin-bottom: 1px">
                                     <input type="hidden" class="form-control" name="idUsuario" id="idUsuario" th:field="*{idUsuario}"/>
                                 </div>

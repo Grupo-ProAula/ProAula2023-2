@@ -21,7 +21,7 @@
                             
                         </div>
                         <div class="col-md-8">
-                            <form th:action="@{/GuardarCoordinador}" method="POST" th:object="${coordinador}">
+                            <form th:action="@{/Coordinadores/Save}" method="POST" th:object="${coordinador}">
                                 <div class="form-group" style="margin-bottom: 1px">
                                     <input type="hidden" class="form-control" name="idUsuario" id="idUsuario" th:field="*{idUsuario}"/>
                                 </div>

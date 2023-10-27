@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+    <head th:replace="plantillas/partes :: head"></head>
+    <body>
+        <header th:replace="plantillas/partes :: header"></header>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12"><br>
+                <div th:if="${estudiante.idUsuario != 0}">
+                    <center>
+                        <h3>Inscripciones De <b th:text="${estudiante.nombre}+' '+${estudiante.apellidos}"></b></h3> 
+                    </center>     
+                    <div class="row" th:if="${usuario.tipo != 'Estudiante'}">
+                        <div class="col-md-2">	
+                            <a class="btn btn-block btn-primary" th:href="@{/Estudiantes}">
+                                Regresar
+                            </a>
+                        </div><br><br>
+                    </div>
+                </div>
+                <div th:if="${actividad.idActividadProgramada != 0}">
+                    <center>
+                        <h3>Inscripciones De <b th:text="${actividad.actividad.nombre}"></b></h3>
+                    </center>     
+                    <div class="row">
+                        <div class="col-md-2">	
+                            <a class="btn btn-block btn-primary" th:href="@{/ActividadesProgramadas}">
+                                Regresar
+                            </a>
+                        </div><br><br>
+                    </div>
+                </div>
+                <div th:if="${participaciones != null and estudiante.idUsuario != 0}">
+                    <table class="table table-bordered table-hover" id="tabla">
+                        <thead>
+                            <tr class="bg-primary">
+                                <th class="text-center">ACTIVIDAD</th>
+                                <th class="text-center">CATEGORIA</th>
+                                <th class="text-center">PERIODO</th>
+                                <th class="text-center">FECHA INICIO</th>
+                                <th class="text-center">FECHA FIN</th>
+                                <th class="text-center">ENCARGADO</th>
+                                <th class="text-center">FECHA INSCRIPCION</th>
+                                <th class="text-center">ESTADO</th>
+                                <th class="text-center" th:if="${usuario.tipo == 'Estudiante'}">ACCIONES </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="p: ${participaciones}">
+                                <td th:text="${p.actividadProgramada.actividad.nombre}" class="text-center"></td>
+                                <td th:text="${p.actividadProgramada.actividad.tipo}" class="text-center"></td>
+                                <td th:text="${p.actividadProgramada.periodo}" class="text-center"></td>
+                                <td th:text="${#dates.format(p.actividadProgramada.fechaInicio,'yyyy-MM-dd')}" class="text-center"></td>
+                                <td th:text="${#dates.format(p.actividadProgramada.fechaFin,'yyyy-MM-dd')}" class="text-center"></td>
+                                <td th:text="${p.actividadProgramada.encargado.nombre}+' '+${p.actividadProgramada.encargado.apellidos}" class="text-center"></td>
+                                <td th:text="${#dates.format(p.fechaInscripcion,'yyyy-MM-dd')}" class="text-center"></td>
+                                <td th:text="${p.estado}" class="text-center"></td>
+                                <td class="text-center" th:if="${usuario.tipo == 'Estudiante'}">
+                                    <a class="btn btn-danger" th:onclick="desinscribirse([[${p.idParticipante}]],'/Participaciones/Unrol/','/Participaciones')">Desinscribirse</a>
+                                    <a class="btn btn-success">Horarios</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div th:if="${participaciones != null and actividad.idActividadProgramada != 0}">
+                    <table class="table table-bordered table-hover" id="tabla">
+                        <thead>
+                            <tr class="bg-primary">
+                                <th class="text-center">CEDULA</th>
+                                <th class="text-center">ESTUDIANTE</th>
+                                <th class="text-center">PROGRAMA</th>
+                                <th class="text-center">CORREO</th>
+                                <th class="text-center">TELEFONO</th>
+                                <th class="text-center">SEMESTRE</th>
+                                <th class="text-center">FECHA INSCRIPCION</th>
+                                <th class="text-center">ESTADO</th>
+                                <th class="text-center" th:if="${usuario.tipo == 'Estudiante'}">ACCIONES </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="p: ${participaciones}">
+                                <td th:text="${p.estudiante.cedula}" class="text-center"></td>
+                                <td th:text="${p.estudiante.nombre}+' '+${p.estudiante.apellidos} " class="text-center"></td>
+                                <td th:text="${p.estudiante.programa.nombre}" class="text-center"></td>
+                                <td th:text="${p.estudiante.correo}" class="text-center"></td>
+                                <td th:text="${p.estudiante.telefono}" class="text-center"></td>
+                                <td th:text="${p.estudiante.semestre}" class="text-center"></td>
+                                <td th:text="${#dates.format(p.fechaInscripcion,'yyyy-MM-dd')}" class="text-center"></td>
+                                <td th:text="${p.estado}" class="text-center"></td>
+                                <td class="text-center" th:if="${usuario.tipo == 'Estudiante'}">
+                                    <a class="btn btn-danger" th:onclick="desinscribirse([[${p.idParticipante}]],'/Participaciones/Unrol/','/Participaciones')">Desinscribirse</a>
+                                    <a class="btn btn-success">Horarios</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

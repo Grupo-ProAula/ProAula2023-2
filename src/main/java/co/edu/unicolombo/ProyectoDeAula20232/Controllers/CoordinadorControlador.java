@@ -18,10 +18,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @Slf4j
+@RequestMapping("/Coordinadores")
 public class CoordinadorControlador {
     
     @Autowired
@@ -33,7 +35,7 @@ public class CoordinadorControlador {
     @Autowired
     IProgramaServicios programService;
     
-    @GetMapping("/Coordinadores")
+    @GetMapping("")
     public String listarCoordinadores(Model modelo, @Param("palabra")String palabra, HttpSession session){
         List<Coordinadores> listaCoordinadores = (List<Coordinadores>)coordinadorService.listarCoordinadores(palabra);
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
@@ -50,7 +52,7 @@ public class CoordinadorControlador {
         return "Coordinadores/ListaCoordinadores";
     }
     
-    @GetMapping("/RegistrarCoordinador")
+    @GetMapping("/Add")
     public String registarCoordinador(Model modelo, HttpSession session, RedirectAttributes atributos){
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
         if(logueado == null){
@@ -67,7 +69,7 @@ public class CoordinadorControlador {
         return "Coordinadores/FormularioCoordinadores";
     }
     
-    @PostMapping("/GuardarCoordinador")
+    @PostMapping("/Save")
     public String guardarCoordinador(@Valid @ModelAttribute Coordinadores coordinador, Model modelo, RedirectAttributes atributos, HttpSession session){
         coordinador.setEstado("Activo");
         coordinador.setTipo("Coordinador");
@@ -108,7 +110,7 @@ public class CoordinadorControlador {
         return "redirect:/Coordinadores";
     }
     
-    @GetMapping("/EditarCoordinador/{idUsuario}")
+    @GetMapping("/Edit/{idUsuario}")
     public String editarCoordinador(Coordinadores coordinador, Model modelo, HttpSession session){
         coordinador = coordinadorService.buscarCoordinador(coordinador.getIdUsuario());
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
@@ -125,7 +127,7 @@ public class CoordinadorControlador {
         return "Coordinadores/FormularioCoordinadores";
     }
     
-    @GetMapping("/EliminarCoordinador/{idUsuario}")
+    @GetMapping("/Delete/{idUsuario}")
     public String eliminarEstudiante(Coordinadores coordinador, RedirectAttributes atributos){
         Coordinadores c = coordinadorService.buscarCoordinador(coordinador.getIdUsuario());
         c.setEstado("Eliminado");

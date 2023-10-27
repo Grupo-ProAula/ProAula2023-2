@@ -16,6 +16,9 @@ public interface ICrudEstudiantes extends JpaRepository<Estudiantes, Integer>{
     @Query("SELECT e FROM Estudiantes e WHERE e.estado = 'Activo' AND (e.nombre LIKE %?1% OR e.apellidos LIKE %?1% OR e.codigoEstudiantil LIKE %?1% OR e.cedula LIKE %?1%)")
     public List<Estudiantes> buscarEstudiantes(String palabra);
     
-    @Query("SELECT e FROM Estudiantes e WHERE e.programa.idPrograma = ?1")
+    @Query("SELECT e FROM Estudiantes e WHERE e.estado = 'Activo' AND e.programa.idPrograma = ?1")
     public List<Estudiantes> listarEstudiantesPrograma(int idPrograma);
+    
+    @Query("SELECT e FROM Estudiantes e WHERE e.estado = 'Activo' AND e.programa.idPrograma = ?1 AND (e.nombre LIKE %?2% OR e.apellidos LIKE %?2% OR e.codigoEstudiantil LIKE %?2% OR e.cedula LIKE %?2%)")
+    public List<Estudiantes> buscarEstudiantesPrograma(int idPrograma, String palabra);
 }

@@ -21,7 +21,7 @@
                             
                         </div>
                         <div class="col-md-8">
-                            <form th:action="@{/GuardarActividadProgramada}" method="POST" th:object="${actividadProgramada}">
+                            <form th:action="@{/ActividadesProgramadas/Save}" method="POST" th:object="${actividadProgramada}">
                                 <div class="form-group" style="margin-bottom: 1px">
                                     <input type="hidden" class="form-control" name="id" id="id" placeholder="ID" th:field="*{idActividadProgramada}" required />
                                 </div>

@@ -14,16 +14,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @Slf4j
+@RequestMapping("/Actividades")
 public class ActividadControlador {
     
     @Autowired
     IActividadServicios activiyService;
     
-    @GetMapping("/Actividades")
+    @GetMapping("")
     public String listarActividades(Model modelo, @Param("palabra")String palabra,HttpSession session){
         List<Actividades> listaActividad = (List<Actividades>)activiyService.listarActividades(palabra);
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
@@ -40,7 +42,7 @@ public class ActividadControlador {
         return "Actividades/ListaActividades";
     }
     
-    @GetMapping("/RegistrarActividad")
+    @GetMapping("/Add")
     public String MostrarFormularioActividades(Model modelo,HttpSession session){
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
         if(logueado == null){
@@ -54,7 +56,7 @@ public class ActividadControlador {
         return "Actividades/FormularioActividades";
     }
     
-    @PostMapping("/GuardarActividad")
+    @PostMapping("/Save")
     public String guardarActividad(@Valid Actividades actividad, Model modelo, RedirectAttributes atributos, HttpSession session){
         actividad.setEstado("Activo");
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
@@ -84,7 +86,7 @@ public class ActividadControlador {
         return "redirect:/Actividades";
     }
     
-    @GetMapping("/EditarActividad/{idActividad}")
+    @GetMapping("/Edit/{idActividad}")
     public String editarActividad(Actividades actividad, Model modelo,HttpSession session){
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
         if(logueado == null){
@@ -99,7 +101,7 @@ public class ActividadControlador {
         return "Actividades/FormularioActividades";
     }
     
-    @GetMapping("/EliminarActividad/{idActividad}")
+    @GetMapping("/Delete/{idActividad}")
     public String eliminarActividad(Actividades actividad, RedirectAttributes atributos){
         Actividades a = activiyService.buscarActividad(actividad);
         a.setEstado("Eliminado");

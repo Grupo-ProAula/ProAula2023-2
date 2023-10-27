@@ -2,6 +2,7 @@
 package co.edu.unicolombo.ProyectoDeAula20232.Models;
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,27 +17,27 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Data
-@Table(name = "Participaciones", catalog = "ProAula_BD")
-public class Participaciones implements Serializable{
+@Table(name = "Asistencias", catalog = "ProAula_BD")
+public class Asistencias implements Serializable{
     
     private static final long serialVersionUID = 1L;
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idParticipante;  
+    private int idAsistencia;
     
-    @Column(name="fechaInscripcion", nullable = false, columnDefinition = "Date")
+    @Column(name="fechaAsistencia", nullable = false, columnDefinition = "Date")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private Date fechaInscripcion;
+    private Date fechaAsistencia;
+    
+    @Column(name="horasAsistidas", nullable = false, length = 15)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
+    private Time horasAsistidas;
     
     @Column(name="estado", nullable = false, length = 15)
     private String estado;
     
+    @JoinColumn(name = "idParticipacion", nullable = false)
     @ManyToOne
-    @JoinColumn(name="idEstudiante", nullable = false)
-    private Estudiantes estudiante;
-    
-    @ManyToOne
-    @JoinColumn(name="idActividadProgramada", nullable = false)
-    private ActividadesProgramadas actividadProgramada;
+    private Participaciones participacion;
 }
