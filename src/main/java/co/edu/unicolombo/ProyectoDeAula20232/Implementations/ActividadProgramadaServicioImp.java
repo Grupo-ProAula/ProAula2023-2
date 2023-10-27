@@ -33,8 +33,24 @@ public class ActividadProgramadaServicioImp implements IActividadProgramadaServi
     }
 
     @Override
-    public ActividadesProgramadas buscarActividadProgramada(ActividadesProgramadas activity) {
-        return crudActividad.findById(activity.getIdActividadProgramada()).orElse(null);
+    public ActividadesProgramadas buscarActividadProgramada(int idActividad) {
+        return crudActividad.findById(idActividad).orElse(null);
+    }
+
+    @Override
+    public List<ActividadesProgramadas> listarActividadesProgramadasEncargados(int idEncargado, String palabra) {
+        if(palabra != null){
+            return crudActividad.buscarActividadesProgramadasEncargado(idEncargado, palabra);
+        }
+        return crudActividad.listarActividadesProgramadasEncargado(idEncargado);
+    }
+
+    @Override
+    public List<ActividadesProgramadas> listarActividadesProgramadasDisponibles(int idEstudiante, String palabra) {
+        if(palabra != null){
+            return crudActividad.buscarActividadesProgramadasDisponibles(idEstudiante, palabra);
+        }
+        return crudActividad.listarActividadesProgramadasDisponibles(idEstudiante);
     }
     
 }

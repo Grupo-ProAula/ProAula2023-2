@@ -38,7 +38,10 @@ public class EstudianteServicioImp implements IEstudianteServicios{
     }
 
     @Override
-    public List<Estudiantes> listarEstudiantesPrograma(int idPrograma) {
+    public List<Estudiantes> listarEstudiantesPrograma(int idPrograma, String palabra) {
+        if(palabra != null){
+           return crudEstudiante.buscarEstudiantesPrograma(idPrograma,palabra);
+        }
         return crudEstudiante.listarEstudiantesPrograma(idPrograma);
     }
     

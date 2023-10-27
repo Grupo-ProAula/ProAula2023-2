@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+    <head th:replace="plantillas/partes :: head"></head>
+    <body>
+        <header th:replace="plantillas/partes :: header"></header>
+        <style>
+            .Scroll {
+                height:220px;
+                overflow-y: scroll;
+                padding: 10px;
+            }
+        </style>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12"><br>
+                    <div class="col-md-3" style="margin-left: 15px">
+                        <a class="btn btn-primary" th:href="@{/Asistencias/Actividad/}+${actividad.idActividadProgramada}">
+                            Regresar
+                        </a>
+                    </div>
+                    <center>
+                        <h3>Registrar Asistencia En <b th:text="${actividad.actividad.nombre}"></b></h3>
+                    </center><br>
+                    <div class="row">
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-8">
+                            <form th:action="@{/Asistencias/Save}" method="POST">
+                                <h5>Seleccionar Estudiantes</h5>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div th:if="${participantes != null and !participantes.empty}" style="border: 1px solid black">
+                                            <div class="Scroll" >
+                                                <div class="form-check" th:each="p : ${participantes}">
+                                                    <input class="form-check-input" type="checkbox" th:value="${p.idParticipante}" id="estudiante" name="estudiantes[]">
+                                                    <label class="form-check-label" for="estudiante">
+                                                        <h5 th:text="${p.estudiante.nombre}+' '+${p.estudiante.apellidos}"></h5>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div th:unless="${participantes != null and !participantes.empty}">
+                                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                                <strong>No Hay Estudiantes Inscritos En Esta Actividad</strong>
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group" style="margin-bottom: 1px">
+                                            <input type="hidden" class="form-control" name="idActividad" id="idActividad" th:value="${actividad.idActividadProgramada}" required />
+                                        </div>
+                                        <div class="form-group" style="margin-bottom: 1px">
+                                            <label for="fechaAsistencia" style="margin: 0px">
+                                                Fecha Asistencia
+                                            </label>
+                                            <input type="date" class="form-control" name="fechaAsistencia" id="fechaAsistencia" required />
+                                        </div><br>
+                                        <button type="submit" class="btn btn-primary">
+                                            Registrar
+                                        </button>
+                                        <button type="reset" class="btn btn-danger">
+                                            Limpiar
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                            </form>
+                        </div>
+                        <div class="col-md-2">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

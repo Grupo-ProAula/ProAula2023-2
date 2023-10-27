@@ -11,26 +11,14 @@
                         <h3>Modulo De Coordinadores</h3>
                     </center>
 		<div class="row">
-                    <div class="col-md-3">	
-                        <a class="btn btn-block btn-primary" th:href="@{/RegistrarCoordinador}">
+                    <div class="col-md-2">	
+                        <a class="btn btn-block btn-primary" th:href="@{/Coordinadores/Add}">
                             Registrar Coordinador
                         </a>
                     </div><br><br>
-                    <div class="col-md-9">
-                        <form role="form" th:action="@{/Coordinadores}">
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="palabra" id="palabra" placeholder="Buscar Por Nombre"/> 
-                                <div class="input-group-append" style="margin-left: 10px" >
-                                    <button class="btn btn-primary" type="submit" style="padding: 0px 20px">
-                                        Buscar
-                                    </button>
-                                </div>    
-                            </div>
-                        </form>
-                    </div>
                 </div>
-                <div th:if="${coordinadores != null and !coordinadores.empty}">
-                    <table class="table table-bordered table-hover">
+                <div th:if="${coordinadores != null}">
+                    <table class="table table-bordered table-hover" id="tabla">
                         <thead>
                             <tr class="bg-primary">
                                 <th class="text-center">CEDULA</th>
@@ -51,20 +39,12 @@
                                 <td th:text="${c.telefono}" class="text-center"></td>
                                 <td th:text="${c.programa.nombre}" class="text-center"></td>
                                 <th class="text-center">
-                                    <a class="btn btn-info" th:href="@{/EditarCoordinador/}+${c.idUsuario}">EDITAR</a>
-                                    <a class="btn btn-danger" th:onclick="eliminar([[${c.idUsuario}]],'/EliminarCoordinador/','/Coordinadores')">ELIMINAR</a>
+                                    <a class="btn btn-info" th:href="@{/Coordinadores/Edit/}+${c.idUsuario}">Editar</a>
+                                    <a class="btn btn-danger" th:onclick="eliminar([[${c.idUsuario}]],'/Coordinadores/Delete/','/Coordinadores')">Eliminar</a>
                                 </th>
                             </tr>
                         </tbody>
                     </table>
-                </div>
-                <div th:if="${coordinadores == null or coordinadores.empty}">
-                    <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                        <strong>La Lista De Coordinadores Esta Vacia</strong>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
                 </div>
                 </div>
             </div>

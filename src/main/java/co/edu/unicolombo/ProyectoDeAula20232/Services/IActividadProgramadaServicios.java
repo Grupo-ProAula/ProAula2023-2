@@ -12,5 +12,9 @@ public interface IActividadProgramadaServicios {
     
     public void eliminarActividadProgramada(ActividadesProgramadas activity);
     
-    public ActividadesProgramadas buscarActividadProgramada(ActividadesProgramadas activity);
+    public ActividadesProgramadas buscarActividadProgramada(int idActividad);
+    
+    public List<ActividadesProgramadas> listarActividadesProgramadasEncargados(int idEncargado, String palabra);
+    
+    public List<ActividadesProgramadas> listarActividadesProgramadasDisponibles(int idEstudiante, String palabra);
 }

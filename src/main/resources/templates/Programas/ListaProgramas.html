@@ -11,26 +11,14 @@
                         <h3>Modulo De Programas</h3>
                     </center>
 		<div class="row">
-                    <div class="col-md-3">	
-                        <a class="btn btn-block btn-primary" th:href="@{/RegistrarPrograma}">
+                    <div class="col-md-2">	
+                        <a class="btn btn-block btn-primary" th:href="@{/Programas/Add}">
                             Registrar Programa
                         </a>
                     </div><br><br>
-                    <div class="col-md-9">
-                        <form role="form" th:action="@{/Programas}">
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="palabra" id="palabra" th:value="${palabra}" placeholder="Buscar Por Nombre"/> 
-                                <div class="input-group-append" style="margin-left: 10px" >
-                                    <button class="btn btn-primary" type="submit" style="padding: 0px 20px">
-                                        Buscar
-                                    </button>
-                                </div>    
-                            </div>
-                        </form>
-                    </div>
                 </div>
-                <div th:if="${programas != null and !programas.empty}">
-                    <table class="table table-bordered table-hover">
+                <div th:if="${programas != null}">
+                    <table class="table table-bordered table-hover" id="tabla">
                         <thead>
                             <tr class="bg-primary">
                                 <th class="text-center">CODIGO</th>
@@ -41,24 +29,16 @@
                         </thead>
                         <tbody>
                             <tr th:each="p: ${programas}">
-                                <td th:text="${p.idPrograma}" class="text-center"></td>
+                                <td th:text="${p.codigoPrograma}" class="text-center"></td>
                                 <td th:text="${p.nombre}" class="text-center"></td>
                                 <td th:text="${p.semestresTotales}" class="text-center"></td>
                                 <td class="text-center">
-                                    <a class="btn btn-info" th:href="@{/EditarPrograma/}+${p.idPrograma}">EDITAR</a>
-                                    <a class="btn btn-danger" th:onclick="eliminar([[${p.idPrograma}]],'/EliminarPrograma/','/Programas')">ELIMINAR</a>
+                                    <a class="btn btn-info" th:href="@{/Programas/Edit/}+${p.idPrograma}">Editar</a>
+                                    <a class="btn btn-danger" th:onclick="eliminar([[${p.idPrograma}]],'/Programas/Delete/','/Programas')">Eliminar</a>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                </div>
-                <div th:if="${programas == null or programas.empty}">
-                    <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                        <strong>La Lista De Programas Esta Vacia</strong>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
                 </div>
                 </div>
             </div>

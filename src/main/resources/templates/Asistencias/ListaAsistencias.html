@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+    <head th:replace="plantillas/partes :: head"></head>
+    <body>
+        <header th:replace="plantillas/partes :: header"></header>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12"><br>
+                <div th:if="${estudiante.idUsuario != 0}">
+                    <div class="row" th:if="${usuario.tipo != 'Estudiante'}">
+                        <div class="col-md-2">	
+                            <a class="btn btn-block btn-primary" th:href="@{/Estudiantes}">
+                                Regresar
+                            </a>
+                        </div><br><br>
+                    </div>
+                    <center>
+                        <h3>Asistencias De <b th:text="${estudiante.nombre}+' '+${estudiante.apellidos}"></b></h3> 
+                    </center>     
+                </div>
+                <div th:if="${actividad.idActividadProgramada != 0}">
+                    <center>
+                        <h3>Asistencias De <b th:text="${actividad.actividad.nombre}"></b></h3>
+                    </center>
+                    <div class="row" th:if="${usuario.tipo == 'Encargado'}">
+                        <div class="col-md-2">	
+                            <a class="btn btn-block btn-primary" th:href="@{/ActividadesProgramadas}">
+                                Regresar
+                            </a>
+                        </div><br><br>
+                        <div class="col-md-8"></div>
+                        <div class="col-md-2">	
+                            <a class="btn btn-block btn-primary" th:href="@{/Asistencias/Add/}+${actividad.idActividadProgramada}">
+                                Registrar Asistencia
+                            </a>
+                        </div><br><br>       
+                    </div>
+                    <div class="row" th:if="${usuario.tipo != 'Encargado'}">
+                        <div class="col-md-2">	
+                            <a class="btn btn-block btn-primary" th:href="@{/ActividadesProgramadas}">
+                                Regresar
+                            </a>
+                        </div><br><br>
+                    </div>
+                </div>
+                <div th:if="${asistencias != null}">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <h4>Horas Asistidas Totales: <b id="horasTotales" th:text="${totalHoras}"></b></h4><br>
+                        </div>
+                        <div class="col-md-2">	
+                            <input type="text" class="form-control inputBuscar" id="inputBuscar" placeholder="Buscar">
+                        </div><br><br>
+                    </div>
+                    <table class="table table-bordered table-hover" id="tabla2">
+                        <thead>
+                            <tr class="bg-primary">
+                                <th class="text-center">ACTIVIDAD</th>
+                                <th class="text-center">PERIODO</th>
+                                <th class="text-center">ESTUDIANTE</th>
+                                <th class="text-center">CEDULA</th>
+                                <th class="text-center">FECHA ASISTENCIA</th>
+                                <th class="text-center">HORAS ASISTIDAS</th>
+                                <th class="text-center">ESTADO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="a: ${asistencias}">
+                                <td th:text="${a.participacion.actividadProgramada.actividad.nombre}" class="text-center"></td>
+                                <td th:text="${a.participacion.actividadProgramada.periodo}" class="text-center"></td>
+                                <td th:text="${a.participacion.estudiante.nombre}+' '+${a.participacion.estudiante.apellidos}" class="text-center"></td>
+                                <td th:text="${a.participacion.estudiante.cedula}" class="text-center"></td>
+                                <td th:text="${#dates.format(a.fechaAsistencia,'yyyy-MM-dd')}" class="text-center"></td>
+                                <td th:text="${#dates.format(a.horasAsistidas, 'HH:mm')}" class="text-center"></td>
+                                <td th:text="${a.estado}" class="text-center"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

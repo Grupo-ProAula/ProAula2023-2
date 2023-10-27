@@ -21,7 +21,7 @@
                             
                         </div>
                         <div class="col-md-8">
-                            <form th:action="@{/GuardarActividadProgramada}" method="POST" th:object="${actividadProgramada}">
+                            <form th:action="@{/ActividadesProgramadas/Save}" method="POST" th:object="${actividadProgramada}">
                                 <div class="form-group" style="margin-bottom: 1px">
                                     <input type="hidden" class="form-control" name="id" id="id" placeholder="ID" th:field="*{idActividadProgramada}" required />
                                 </div>
@@ -50,6 +50,16 @@
                                         Fecha Fin
                                     </label>
                                     <input type="date" class="form-control" name="fechaFin" id="fechaFin" placeholder="Fecha Fin" th:field="*{fechaFin}" required/>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 1px">
+                                    <label for="encargado" style="margin: 0px">
+                                        Encargado
+                                    </label>
+                                    <select class="form-control" name="encargado" id="encargado" th:field="*{encargado}" required >
+                                        <div th:each="e: ${encargados}">
+                                            <option th:value="${e.idUsuario}" th:text="${e.nombre}+' '+${e.apellidos}"></option>
+                                        </div>
+                                    </select>
                                 </div><br>
                                 <button type="submit" class="btn btn-primary" th:if="${actividadProgramada.idActividadProgramada} == null or ${actividadProgramada.periodo} == null">
                                     Registrar

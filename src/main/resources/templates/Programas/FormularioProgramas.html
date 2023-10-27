@@ -21,7 +21,7 @@
                             
                         </div>
                         <div class="col-md-8">
-                            <form th:action="@{/GuardarPrograma}" method="POST" th:object="${programa}">
+                            <form th:action="@{/Programas/Save}" method="POST" th:object="${programa}">
                                 <div class="form-group" style="margin-bottom: 1px">
                                     <input type="hidden" class="form-control" name="idPrograma" id="idPrograma" th:field="*{idPrograma}" />
                                 </div>

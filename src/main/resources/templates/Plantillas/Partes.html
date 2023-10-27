@@ -6,6 +6,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
         <!-- jQuery library -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <!-- Popper JS -->
@@ -14,7 +15,9 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script type="text/javascript" src="funciones.js"></script>
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+        <script type="text/javascript" src="/funciones.js"></script>
     </head>
     <body>
         <header th:fragment="header">
@@ -31,7 +34,7 @@
                                         <a class="nav-link" th:href="@{/}">Inicio</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" th:if="${usuario.tipo == 'Administrador'} OR ${usuario.tipo == 'Coordinador'} OR ${usuario.tipo == 'Encargado'}" th:href="@{/Estudiantes}">Estudiantes</a>
+                                        <a class="nav-link" th:if="${usuario.tipo == 'Administrador'} OR ${usuario.tipo == 'Coordinador'}" th:href="@{/Estudiantes}">Estudiantes</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" th:if="${usuario.tipo == 'Administrador'}" th:href="@{/Encargados}">Encargados</a>
@@ -46,10 +49,16 @@
                                         <a class="nav-link" th:if="${usuario.tipo == 'Administrador'}" th:href="@{/Programas}">Programas</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/Actividades}">Actividades</a>
+                                        <a class="nav-link" th:if="${usuario.tipo == 'Administrador'}" th:href="@{/Actividades}">Actividades</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/ActividadesProgramadas}">Programar</a>
+                                        <a class="nav-link" th:if="${usuario.tipo == 'Administrador'} OR ${usuario.tipo == 'Encargado'} OR ${usuario.tipo == 'Estudiante'}" th:href="@{/ActividadesProgramadas}">Actividades Programadas</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" th:if="${usuario.tipo == 'Estudiante'}" th:href="@{/Participaciones}">Actividades Inscritas</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" th:if="${usuario.tipo == 'Estudiante'}" th:href="@{/Asistencias}">Asistencias</a>
                                     </li>
 				</ul>
 				<ul class="navbar-nav ml-md-auto">

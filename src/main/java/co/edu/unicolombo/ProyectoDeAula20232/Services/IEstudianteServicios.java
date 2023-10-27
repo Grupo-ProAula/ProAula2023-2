@@ -14,5 +14,5 @@ public interface IEstudianteServicios {
     
     public Estudiantes buscarEstudiante(Integer id);
     
-    public List<Estudiantes> listarEstudiantesPrograma(int idPrograma);
+    public List<Estudiantes> listarEstudiantesPrograma(int idPrograma, String palabra);
 }

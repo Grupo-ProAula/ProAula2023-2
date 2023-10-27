@@ -12,8 +12,25 @@ public interface ICrudActividadesProgramadas extends JpaRepository<ActividadesPr
     
     @Query("SELECT ap FROM ActividadesProgramadas ap WHERE ap.estado = 'Activo'")
     public List<ActividadesProgramadas> listarActividadesProgramadasActivas();
-    
-    //@Query("SELECT ap FROM ActividadesProgramadas ap INNER JOIN Actividades a WHERE ap.estado = 'Activo' AND ap.periodo LIKE %?1% OR a.nombre LIKE %?1%")
-    @Query("SELECT ap FROM ActividadesProgramadas ap WHERE ap.estado = 'Activo' AND ap.periodo LIKE %?1% OR ap.actividad.nombre LIKE %?1%")
+   
+    @Query("SELECT ap FROM ActividadesProgramadas ap WHERE ap.estado = 'Activo' AND (ap.periodo LIKE %?1% OR ap.actividad.nombre LIKE %?1%)")
     public List<ActividadesProgramadas> buscarActividadesProgramadas(String palabra);
+    
+    @Query("SELECT ap FROM ActividadesProgramadas ap WHERE ap.estado = 'Activo' AND ap.encargado.idUsuario = ?1")
+    public List<ActividadesProgramadas> listarActividadesProgramadasEncargado(int idEncargado);
+    
+    @Query("SELECT ap FROM ActividadesProgramadas ap WHERE ap.estado = 'Activo' AND ap.encargado.idUsuario = ?1 AND (ap.periodo LIKE %?2% OR ap.actividad.nombre LIKE %?2%)")
+    public List<ActividadesProgramadas> buscarActividadesProgramadasEncargado(int idEncargado, String palabra);
+    
+    @Query("SELECT ap FROM ActividadesProgramadas ap WHERE ap.estado = 'Activo' AND ap.idActividadProgramada NOT IN (SELECT p.actividadProgramada.idActividadProgramada FROM Participaciones p WHERE p.estado = 'Activo' AND p.estudiante.idUsuario = ?1)")
+    public List<ActividadesProgramadas> listarActividadesProgramadasDisponibles(int idEstudiante);
+    
+    @Query("SELECT ap FROM ActividadesProgramadas ap WHERE ap.estado = 'Activo' AND (ap.periodo LIKE %?2% OR ap.actividad.nombre LIKE %?2%) AND ap.idActividadProgramada NOT IN (SELECT p.actividadProgramada.idActividadProgramada FROM Participaciones p WHERE p.estado = 'Activo' AND p.estudiante.idUsuario = ?1)")
+    public List<ActividadesProgramadas> buscarActividadesProgramadasDisponibles(int idEstudiante, String palabra);
+            
+    @Query("SELECT ap FROM ActividadesProgramadas ap WHERE ap.estado = 'Activo' AND ap.idActividadProgramada IN (SELECT p.actividadProgramada.idActividadProgramada FROM Participaciones p WHERE p.estado = 'Activo' AND p.estudiante.idUsuario = ?1)")
+    public List<ActividadesProgramadas> listarActividadesProgramadasEstudiante(int idEstudiante);
+    
+    @Query("SELECT ap FROM ActividadesProgramadas ap WHERE ap.estado = 'Activo' AND (ap.periodo LIKE %?2% OR ap.actividad.nombre LIKE %?2%) AND ap.idActividadProgramada IN (SELECT p.actividadProgramada.idActividadProgramada FROM Participaciones p WHERE p.estado = 'Activo' AND p.estudiante.idUsuario = ?1)")
+    public List<ActividadesProgramadas> buscarActividadesProgramadasEstudiante(int idEstudiante, String palabra);
 }
