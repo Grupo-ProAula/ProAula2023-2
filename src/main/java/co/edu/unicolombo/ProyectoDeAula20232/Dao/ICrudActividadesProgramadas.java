@@ -33,4 +33,8 @@ public interface ICrudActividadesProgramadas extends JpaRepository<ActividadesPr
     
     @Query("SELECT ap FROM ActividadesProgramadas ap WHERE ap.estado = 'Activo' AND (ap.periodo LIKE %?2% OR ap.actividad.nombre LIKE %?2%) AND ap.idActividadProgramada IN (SELECT p.actividadProgramada.idActividadProgramada FROM Participaciones p WHERE p.estado = 'Activo' AND p.estudiante.idUsuario = ?1)")
     public List<ActividadesProgramadas> buscarActividadesProgramadasEstudiante(int idEstudiante, String palabra);
+    
+    @Query("SELECT ap FROM ActividadesProgramadas ap WHERE ap.estado = 'Activo' AND ap.actividad.idActividad = ?1")
+    public List<ActividadesProgramadas> listarActividadesProgramadasActividad(int idActividad);
+    
 }

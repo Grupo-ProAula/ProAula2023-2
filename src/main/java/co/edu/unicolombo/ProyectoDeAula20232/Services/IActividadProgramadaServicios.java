@@ -17,4 +17,6 @@ public interface IActividadProgramadaServicios {
     public List<ActividadesProgramadas> listarActividadesProgramadasEncargados(int idEncargado, String palabra);
     
     public List<ActividadesProgramadas> listarActividadesProgramadasDisponibles(int idEstudiante, String palabra);
+    
+    public List<ActividadesProgramadas> listarActividadesProgramadasActividad(int idActividad);
 }

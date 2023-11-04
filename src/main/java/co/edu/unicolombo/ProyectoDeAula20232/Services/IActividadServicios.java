@@ -12,5 +12,5 @@ public interface IActividadServicios {
     
     public void eliminarActividad(Actividades activity);
     
-    public Actividades buscarActividad(Actividades activity);
+    public Actividades buscarActividad(int idActividad);
 }

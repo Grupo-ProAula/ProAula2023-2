@@ -74,26 +74,54 @@ public class AdministradoresControlador {
     public String guardarAdministradores(@Valid @ModelAttribute Administradores administrador , Model modelo, RedirectAttributes atributos, HttpSession session){
         administrador.setEstado("Activo");
         administrador.setTipo("Administrador");
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String password = encoder.encode(administrador.getPassword());
-        administrador.setPassword(password);
+        String defaultPassword = "1234";
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
         if(logueado == null){
             return "redirect:/login";
         }
         try{
             int id = administrador.getIdUsuario();
-            adminService.guardarAdministrador(administrador);
             if(id == 0){
+                if(!logueado.getTipo().equals("Administrador")){
+                    atributos.addFlashAttribute("danger", "Accion No Permitida");
+                    return "redirect:/";
+                }
+                BCryptPasswordEncoder encoder1 = new BCryptPasswordEncoder();
+                String password1 = encoder1.encode(defaultPassword);
+                administrador.setPassword(password1);
+                adminService.guardarAdministrador(administrador);
                 atributos.addFlashAttribute("success", "Administrador Registrado Exitosamente");
+                return "redirect:/Administradores";
             }else{
                 if(administrador.getIdUsuario() == logueado.getIdUsuario()){
+                    if(!logueado.getTipo().equals("Administrador")){
+                        atributos.addFlashAttribute("danger", "Accion No Permitida");
+                        return "redirect:/";
+                    }
+                    BCryptPasswordEncoder encoder2 = new BCryptPasswordEncoder();
+                    String password2 = encoder2.encode(administrador.getPassword());
+                    administrador.setPassword(password2);
+                    adminService.guardarAdministrador(administrador);                    
                     Usuarios user = userService.buscarUsuario(administrador.getIdUsuario());
                     session.setAttribute("usuario.session", user);
                     atributos.addFlashAttribute("success", "Datos Modificados Exitosamente");
                     return "redirect:/";
+                }else{
+                    if(!logueado.getTipo().equals("Administrador")){
+                        atributos.addFlashAttribute("danger", "Accion No Permitida");
+                        return "redirect:/";
+                    }
+                    Administradores a = adminService.buscarAdministrador(id);
+                    a.setCedula(a.getCedula());
+                    a.setNombre(a.getNombre());
+                    a.setApellidos(a.getApellidos());
+                    a.setCorreo(a.getCorreo());
+                    a.setTelefono(a.getTelefono());
+                    a.setCargo(a.getCargo());
+                    adminService.guardarAdministrador(a);
+                    atributos.addFlashAttribute("success", "Administrador Modificado Exitosamente");
+                    return "redirect:/Administradores";
                 }
-                atributos.addFlashAttribute("success", "Administrador Modificado Exitosamente");
             }
         }catch(Exception ex){
             String mensaje="";
@@ -107,7 +135,6 @@ public class AdministradoresControlador {
             modelo.addAttribute("administrador", administrador);
             return "Administradores/FormularioAdministradores";
         }
-        return "redirect:/Administradores";
     }
     
     @GetMapping("/Edit/{idUsuario}")

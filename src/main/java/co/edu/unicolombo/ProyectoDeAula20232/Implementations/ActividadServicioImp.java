@@ -33,8 +33,8 @@ public class ActividadServicioImp implements IActividadServicios{
     }
 
     @Override
-    public Actividades buscarActividad(Actividades activity) {
-        return crudActividad.findById(activity.getIdActividad()).orElse(null);
+    public Actividades buscarActividad(int idActividad) {
+        return crudActividad.findById(idActividad).orElse(null);
     }
     
 }

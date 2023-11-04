@@ -117,7 +117,7 @@ $(document).ready(function() {
     
     $('#inputBuscar').on( 'keyup', function () {
         tabla2.search( this.value ).draw();
-        var datos=tabla2.rows({page:'current'});
+        var datos=tabla2.rows({ search:'applied'});
         var array = datos.data().toArray();
         sumarHoras(array);      
     } );

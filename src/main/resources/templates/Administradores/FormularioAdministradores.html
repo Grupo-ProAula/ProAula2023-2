@@ -61,11 +61,13 @@
                                     </label>
                                     <input type="text" class="form-control" name="cargo" id="cargo" th:field="*{cargo}" placeholder="Cargo" required/>
                                 </div>
-                                <div class="form-group" style="margin-bottom: 7px">
-                                    <label for="contraseña" style="margin: 0px">
-                                        Contraseña
-                                    </label>
-                                    <input type="password" class="form-control" name="contraseña" id="contraseña" placeholder="Contraseña" th:field="*{password}" required/>
+                                <div class="form-group" style="margin-bottom: 7px" th:if="${administrador.idUsuario != 0}">
+                                    <div th:if="${usuario.tipo == 'Administrador' and administrador.idUsuario == usuario.idUsuario}">
+                                        <label for="contraseña" style="margin: 0px">
+                                            Contraseña
+                                        </label>
+                                        <input type="password" class="form-control" name="contraseña" id="contraseña" placeholder="Contraseña" th:field="*{password}" required/>
+                                    </div>
                                 </div><br>
                                 <button type="submit" class="btn btn-primary" th:if="${administrador.idUsuario == 0}">
                                     Registrar

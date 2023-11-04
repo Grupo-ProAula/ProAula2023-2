@@ -17,6 +17,13 @@
                                 Regresar
                             </a>
                         </div><br><br>
+                        <div class="col-md-8">
+                        </div>
+                        <div class="col-md-2">	
+                            <a class="btn btn-block btn-secondary" th:href="@{/Participaciones/Estudiante/PDF/}+${estudiante.idUsuario}">
+                                Imprimir PDF
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div th:if="${actividad.idActividadProgramada != 0}">
@@ -29,6 +36,13 @@
                                 Regresar
                             </a>
                         </div><br><br>
+                        <div class="col-md-8">
+                        </div>
+                        <div class="col-md-2">	
+                            <a class="btn btn-block btn-secondary" th:href="@{/Participaciones/Actividad/PDF/}+${actividad.idActividadProgramada}">
+                                Imprimir PDF
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div th:if="${participaciones != null and estudiante.idUsuario != 0}">
