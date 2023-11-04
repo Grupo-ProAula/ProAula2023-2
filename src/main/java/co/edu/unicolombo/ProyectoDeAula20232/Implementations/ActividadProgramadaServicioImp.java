@@ -52,5 +52,9 @@ public class ActividadProgramadaServicioImp implements IActividadProgramadaServi
         }
         return crudActividad.listarActividadesProgramadasDisponibles(idEstudiante);
     }
-    
+
+    @Override
+    public List<ActividadesProgramadas> listarActividadesProgramadasActividad(int idActividad) {
+        return crudActividad.listarActividadesProgramadasActividad(idActividad);
+    }
 }

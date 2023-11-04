@@ -67,26 +67,54 @@ public class EncargadoControlador {
     public String guardarEncargado(@Valid @ModelAttribute Encargados encargado, Model modelo, RedirectAttributes atributos, HttpSession session){
         encargado.setEstado("Activo");
         encargado.setTipo("Encargado");
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String password = encoder.encode(encargado.getPassword());
-        encargado.setPassword(password);
+        String defaultPassword = "1234";
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
         if(logueado == null){
             return "redirect:/login";
         }
         try{
             int id = encargado.getIdUsuario();
-            encargadoService.guardarEncargado(encargado);
             if(id == 0){
+                if(!logueado.getTipo().equals("Administrador")){
+                    atributos.addFlashAttribute("danger", "Accion No Permitida");
+                    return "redirect:/";
+                }
+                BCryptPasswordEncoder encoder1 = new BCryptPasswordEncoder();
+                String password1 = encoder1.encode(defaultPassword);
+                encargado.setPassword(password1);
+                encargadoService.guardarEncargado(encargado);
                 atributos.addFlashAttribute("success", "Encargado Registrado Exitosamente");
+                return "redirect:/Encargados";
             }else{
                 if(encargado.getIdUsuario() == logueado.getIdUsuario()){
+                    if(!logueado.getTipo().equals("Encargado")){
+                        atributos.addFlashAttribute("danger", "Accion No Permitida");
+                        return "redirect:/";
+                    }
+                    BCryptPasswordEncoder encoder2 = new BCryptPasswordEncoder();
+                    String password2 = encoder2.encode(encargado.getPassword());
+                    encargado.setPassword(password2);
+                    encargadoService.guardarEncargado(encargado);
                     Usuarios user = userService.buscarUsuario(encargado.getIdUsuario());
                     session.setAttribute("usuario.session", user);
                     atributos.addFlashAttribute("success", "Datos Modificados Exitosamente");
                     return "redirect:/";
+                }else{
+                    if(!logueado.getTipo().equals("Administrador")){
+                        atributos.addFlashAttribute("danger", "Accion No Permitida");
+                        return "redirect:/";
+                    }
+                    Encargados e = encargadoService.buscarEncargado(id);
+                    e.setCedula(encargado.getCedula());
+                    e.setNombre(encargado.getNombre());
+                    e.setApellidos(encargado.getApellidos());
+                    e.setCorreo(encargado.getCorreo());
+                    e.setTelefono(encargado.getTelefono());
+                    e.setCargo(encargado.getCargo());
+                    encargadoService.guardarEncargado(e);
+                    atributos.addFlashAttribute("success", "Encargado Modificado Exitosamente");
+                    return "redirect:/Encargados";
                 }
-                atributos.addFlashAttribute("success", "Encargado Modificado Exitosamente");
             }
         }catch(Exception ex){
             String mensaje="";
@@ -100,7 +128,6 @@ public class EncargadoControlador {
             modelo.addAttribute("encargado", encargado);
             return "Encargados/FormularioEncargados";
         }
-        return "redirect:/Encargados";
     }
     
     @GetMapping("/Edit/{idUsuario}")

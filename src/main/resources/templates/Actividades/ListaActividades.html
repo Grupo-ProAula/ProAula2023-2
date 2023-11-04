@@ -24,6 +24,7 @@
                                 <th class="text-center">ID</th>
                                 <th class="text-center">NOMBRE</th>
                                 <th class="text-center">CATEGORIA</th>
+                                <th class="text-center">ESTADO</th>
                                 <th class="text-center">ACCIONES </th>
                             </tr>
                         </thead>
@@ -32,7 +33,9 @@
                                 <td th:text="${a.idActividad}" class="text-center"></td>
                                 <td th:text="${a.nombre}" class="text-center"></td>
                                 <td th:text="${a.tipo}" class="text-center"></td>
+                                <td th:text="${a.estado}" class="text-center"></td>
                                 <td class="text-center">
+                                    <a class="btn btn-secondary" th:href="@{/Actividades/PDF/}+${a.idActividad}">PDF Programaciones</a>
                                     <a class="btn btn-info" th:href="@{/Actividades/Edit/}+${a.idActividad}">Editar</a>
                                     <a class="btn btn-danger" th:onclick="eliminar([[${a.idActividad}]],'/Actividades/Delete/','/Actividades')">Eliminar</a>
                                 </td>

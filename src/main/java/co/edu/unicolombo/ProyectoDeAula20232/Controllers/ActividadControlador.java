@@ -2,9 +2,17 @@
 package co.edu.unicolombo.ProyectoDeAula20232.Controllers;
 
 import co.edu.unicolombo.ProyectoDeAula20232.Models.Actividades;
+import co.edu.unicolombo.ProyectoDeAula20232.Models.ActividadesProgramadas;
 import co.edu.unicolombo.ProyectoDeAula20232.Models.Usuarios;
+import co.edu.unicolombo.ProyectoDeAula20232.Services.IActividadProgramadaServicios;
 import co.edu.unicolombo.ProyectoDeAula20232.Services.IActividadServicios;
+import co.edu.unicolombo.ProyectoDeAula20232.Util.ActividadesExporterPDF;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +21,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -21,6 +30,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Slf4j
 @RequestMapping("/Actividades")
 public class ActividadControlador {
+    
+    @Autowired
+    IActividadProgramadaServicios programActivityService;
     
     @Autowired
     IActividadServicios activiyService;
@@ -96,17 +108,35 @@ public class ActividadControlador {
             return "redirect:/";
         }
         modelo.addAttribute("usuario", logueado);
-        actividad = activiyService.buscarActividad(actividad);
+        actividad = activiyService.buscarActividad(actividad.getIdActividad());
         modelo.addAttribute("actividad", actividad);
         return "Actividades/FormularioActividades";
     }
     
     @GetMapping("/Delete/{idActividad}")
     public String eliminarActividad(Actividades actividad, RedirectAttributes atributos){
-        Actividades a = activiyService.buscarActividad(actividad);
+        Actividades a = activiyService.buscarActividad(actividad.getIdActividad());
         a.setEstado("Eliminado");
         activiyService.guardarActividad(a);
         atributos.addFlashAttribute("warning", "Actividad Eliminada");
         return "redirect:/Actividades";
+    }
+    
+    @GetMapping("/PDF/{idActividad}")
+    public void generarPDFActividad(@PathVariable(name="idActividad")int id, HttpServletResponse response) throws IOException{
+        Actividades a = activiyService.buscarActividad(id);
+        List<ActividadesProgramadas> listaActividades = programActivityService.listarActividadesProgramadasActividad(id);        
+        response.setContentType("application/pdf");
+        
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String fecha = dateFormatter.format(new Date());
+        
+        String cabecera = "Content-Disposition";
+        String valor = "attachment; filename=Programaciones_"+a.getNombre()+"_"+fecha+".pdf";
+        
+        response.setHeader(cabecera, valor);
+        
+        ActividadesExporterPDF exporter = new ActividadesExporterPDF(listaActividades, a);
+        exporter.Exportar(response);
     }
 }

@@ -73,26 +73,54 @@ public class CoordinadorControlador {
     public String guardarCoordinador(@Valid @ModelAttribute Coordinadores coordinador, Model modelo, RedirectAttributes atributos, HttpSession session){
         coordinador.setEstado("Activo");
         coordinador.setTipo("Coordinador");
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String password = encoder.encode(coordinador.getPassword());
-        coordinador.setPassword(password);
+        String defaultPassword = "1234";
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
         if(logueado == null){
             return "redirect:/login";
         }
         try{
             int id = coordinador.getIdUsuario();
-            coordinadorService.guardarCoordinador(coordinador);
             if(id == 0){
+                if(!logueado.getTipo().equals("Administrador")){
+                    atributos.addFlashAttribute("danger", "Accion No Permitida");
+                    return "redirect:/";
+                }
+                BCryptPasswordEncoder encoder1 = new BCryptPasswordEncoder();
+                String password1 = encoder1.encode(defaultPassword);
+                coordinador.setPassword(password1);
+                coordinadorService.guardarCoordinador(coordinador);
                 atributos.addFlashAttribute("success", "Coordinador Registrado Exitosamente");
+                return "redirect:/Coordinadores";
             }else{
                 if(coordinador.getIdUsuario() == logueado.getIdUsuario()){
+                    if(!logueado.getTipo().equals("Coordinador")){
+                        atributos.addFlashAttribute("danger", "Accion No Permitida");
+                        return "redirect:/";
+                    }
+                    BCryptPasswordEncoder encoder2 = new BCryptPasswordEncoder();
+                    String password2 = encoder2.encode(coordinador.getPassword());
+                    coordinador.setPassword(password2);
+                    coordinadorService.guardarCoordinador(coordinador);
                     Usuarios user = userService.buscarUsuario(coordinador.getIdUsuario());
                     session.setAttribute("usuario.session", user);
                     atributos.addFlashAttribute("success", "Datos Modificados Exitosamente");
                     return "redirect:/";
+                }else{
+                    if(!logueado.getTipo().equals("Administrador")){
+                        atributos.addFlashAttribute("danger", "Accion No Permitida");
+                        return "redirect:/";
+                    }
+                    Coordinadores c = coordinadorService.buscarCoordinador(id);
+                    c.setCedula(coordinador.getCedula());
+                    c.setNombre(coordinador.getNombre());
+                    c.setApellidos(coordinador.getApellidos());
+                    c.setCorreo(coordinador.getCorreo());
+                    c.setTelefono(coordinador.getTelefono());
+                    c.setPrograma(coordinador.getPrograma());
+                    coordinadorService.guardarCoordinador(c);
+                    atributos.addFlashAttribute("success", "Coordinador Modificado Exitosamente");
+                    return "redirect:/Coordinadores";
                 }
-                atributos.addFlashAttribute("success", "Coordinador Modificado Exitosamente");
             }
         }catch(Exception ex){
             String mensaje="";
@@ -107,7 +135,6 @@ public class CoordinadorControlador {
             modelo.addAttribute("programas", programService.listarProgramasDisponibles(coordinador.getIdUsuario()));
             return "Coordinadores/FormularioCoordinadores";
         }
-        return "redirect:/Coordinadores";
     }
     
     @GetMapping("/Edit/{idUsuario}")

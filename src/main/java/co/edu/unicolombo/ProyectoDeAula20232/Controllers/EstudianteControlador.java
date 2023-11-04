@@ -81,25 +81,52 @@ public class EstudianteControlador {
     public String guardarEstudiante(@Valid @ModelAttribute Estudiantes estudiante, Model modelo, RedirectAttributes atributos, HttpSession session){
         estudiante.setEstado("Activo");
         estudiante.setTipo("Estudiante");
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String password = encoder.encode(estudiante.getPassword());
-        estudiante.setPassword(password);
+        String defaultPassword = "1234";
         Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
         if(logueado == null){
             return "redirect:/login";
         }
         try{
             int id = estudiante.getIdUsuario();
-            studentService.guardarEstudiante(estudiante);
             if(id == 0){
+                if(!logueado.getTipo().equals("Administrador")){
+                    atributos.addFlashAttribute("danger", "Accion No Permitida");
+                    return "redirect:/";
+                }
+                BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+                String password = encoder.encode(defaultPassword);
+                estudiante.setPassword(password);
+                studentService.guardarEstudiante(estudiante);
                 atributos.addFlashAttribute("success", "Estudiante Registrado Exitosamente");
             }else{
                 if(estudiante.getIdUsuario() == logueado.getIdUsuario()){
+                    if(!logueado.getTipo().equals("Estudiante")){
+                        atributos.addFlashAttribute("danger", "Accion No Permitida");
+                        return "redirect:/";
+                    }
+                    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+                    String password = encoder.encode(estudiante.getPassword());
+                    estudiante.setPassword(password);
+                    studentService.guardarEstudiante(estudiante);
                     Usuarios user = userService.buscarUsuario(estudiante.getIdUsuario());
                     session.setAttribute("usuario.session", user);
                     atributos.addFlashAttribute("success", "Datos Modificados Exitosamente");
                     return "redirect:/";
                 }else{
+                    if(!logueado.getTipo().equals("Administrador")){
+                        atributos.addFlashAttribute("danger", "Accion No Permitida");
+                        return "redirect:/";
+                    }
+                    Estudiantes e = studentService.buscarEstudiante(id);
+                    e.setCedula(estudiante.getCedula());
+                    e.setCodigoEstudiantil(estudiante.getCodigoEstudiantil());
+                    e.setNombre(estudiante.getNombre());
+                    e.setApellidos(estudiante.getApellidos());
+                    e.setCorreo(estudiante.getCorreo());
+                    e.setTelefono(estudiante.getTelefono());
+                    e.setPrograma(estudiante.getPrograma());
+                    e.setSemestre(estudiante.getSemestre());
+                    studentService.guardarEstudiante(e);
                     atributos.addFlashAttribute("success", "Estudiante Modificado Exitosamente");
                 }
             }
