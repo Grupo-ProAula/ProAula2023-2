@@ -53,7 +53,7 @@ public class HorarioControlador {
         if(logueado == null){
             return "redirect:/login";
         }
-        if(logueado.getTipo().equals("Coordinador")){
+        if(!logueado.getTipo().equals("Administrador")){
             return "redirect:/";
         }
         ActividadesProgramadas ap = programActivityService.buscarActividadProgramada(id);
@@ -71,6 +71,9 @@ public class HorarioControlador {
         if(logueado == null){
             return "redirect:/login";
         }
+        if(!logueado.getTipo().equals("Administrador")){
+            return "redirect:/";
+        }
         log.info(horario.getHoraInicio()+"");
         try {
             if(horario.getHoraInicio().after(horario.getHoraFin())){
@@ -80,13 +83,23 @@ public class HorarioControlador {
                 modelo.addAttribute("danger", "La Hora De Fin No Puede Ser Menor A La De Inicio");
                 return "Horarios/FormularioHorarios";
             }else{
-                horario.setEstado("Activo");
-                if(horario.getIdHorario()== 0){
-                    horarioService.guardarHorario(horario);
-                    atributos.addFlashAttribute("success", "Horario Guardado Exitosamente");
+                Horarios h = horarioService.buscarHorarioDatos(horario.getDia(), horario.getHoraInicio(), horario.getHoraFin(), horario.getActividad().getIdActividadProgramada());
+                if(h == null){
+                    if(horario.getIdHorario()== 0){
+                        horario.setEstado("Activo");
+                        horarioService.guardarHorario(horario);
+                        atributos.addFlashAttribute("success", "Horario Guardado Exitosamente");
+                    }else{
+                        horario.setEstado("Activo");
+                        horarioService.guardarHorario(horario);
+                        atributos.addFlashAttribute("success", "Horario Modificado Exitosamente");
+                    }
                 }else{
-                    horarioService.guardarHorario(horario);
-                    atributos.addFlashAttribute("success", "Horario Modificado Exitosamente");
+                    if(horario.getIdHorario() == h.getIdHorario()){
+                        horarioService.guardarHorario(horario);
+                    }else{
+                        throw new Exception("Esta actividad ya tiene un horario en el mismo dia y en las mismas horas");
+                    }               
                 }
             }
         } catch (Exception ex) {
@@ -100,4 +113,28 @@ public class HorarioControlador {
         return "redirect:/Horarios/"+horario.getActividad().getIdActividadProgramada();
     }
     
+    @GetMapping("/Edit/{idHorario}")
+    public String editarHorario(Horarios horario, Model modelo, HttpSession session){
+        horario = horarioService.buscarHorario(horario.getIdHorario());
+        Usuarios logueado = (Usuarios) session.getAttribute("usuario.session");
+        if(logueado == null){
+            return "redirect:/login";
+        }
+        if(!logueado.getTipo().equals("Administrador")){
+            return "redirect:/";
+        }
+        modelo.addAttribute("usuario", logueado);
+        modelo.addAttribute("horario", horario);
+        modelo.addAttribute("actividad", horario.getActividad());
+        return "Horarios/FormularioHorarios";
+    }
+        
+    @GetMapping("/Delete/{idHorario}")
+    public String eliminarHorario(Horarios horario, RedirectAttributes atributos){
+        Horarios h = horarioService.buscarHorario(horario.getIdHorario());
+        h.setEstado("Eliminado");
+        horarioService.guardarHorario(h);
+        atributos.addFlashAttribute("warning", "Horario Eliminado");
+        return "redirect:/Horarios/"+horario.getActividad().getIdActividadProgramada();
+    }
 }
