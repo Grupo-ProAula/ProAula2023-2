@@ -11,16 +11,18 @@
                     <center>
                         <h3>Inscripciones De <b th:text="${estudiante.nombre}+' '+${estudiante.apellidos}"></b></h3> 
                     </center>     
-                    <div class="row" th:if="${usuario.tipo != 'Estudiante'}">
-                        <div class="col-md-2">	
+                    <div class="row">
+                        <div class="col-md-2" th:if="${usuario.tipo != 'Estudiante'}">	
                             <a class="btn btn-block btn-primary" th:href="@{/Estudiantes}">
                                 Regresar
                             </a>
                         </div><br><br>
+                        <div class="col-md-2" th:unless="${usuario.tipo != 'Estudiante'}">	
+                        </div><br><br>
                         <div class="col-md-8">
                         </div>
                         <div class="col-md-2">	
-                            <a class="btn btn-block btn-secondary" th:href="@{/Participaciones/Estudiante/PDF/}+${estudiante.idUsuario}">
+                            <a class="btn btn-block btn-secondary" th:href="@{/Participaciones/Estudiante/PDF/}+${usuario.idUsuario}">
                                 Imprimir PDF
                             </a>
                         </div>
@@ -72,7 +74,7 @@
                                 <td th:text="${p.estado}" class="text-center"></td>
                                 <td class="text-center" th:if="${usuario.tipo == 'Estudiante'}">
                                     <a class="btn btn-danger" th:onclick="desinscribirse([[${p.idParticipante}]],'/Participaciones/Unrol/','/Participaciones')">Desinscribirse</a>
-                                    <a class="btn btn-success">Horarios</a>
+                                    <a class="btn btn-success" th:href="@{/Horarios/}+${p.actividadProgramada.idActividadProgramada}">Horarios</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -105,7 +107,7 @@
                                 <td th:text="${p.estado}" class="text-center"></td>
                                 <td class="text-center" th:if="${usuario.tipo == 'Estudiante'}">
                                     <a class="btn btn-danger" th:onclick="desinscribirse([[${p.idParticipante}]],'/Participaciones/Unrol/','/Participaciones')">Desinscribirse</a>
-                                    <a class="btn btn-success">Horarios</a>
+                                    <a class="btn btn-success" th:href="@{/Horarios/}+${ap.idActividadProgramada}">Horarios</a>
                                 </td>
                             </tr>
                         </tbody>

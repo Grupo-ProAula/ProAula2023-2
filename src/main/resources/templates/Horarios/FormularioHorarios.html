@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+    <head th:replace="plantillas/partes :: head"></head>
+    <body>
+        <header th:replace="plantillas/partes :: header"></header>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12"><br>
+                    <div class="col-md-3" style="margin-left: 15px">
+                        <a class="btn btn-primary" th:href="@{/Horarios/}+${actividad.idActividadProgramada}">
+                            Regresar
+                        </a>
+                    </div>
+                    <center>
+                        <h3>Registrar Horario Para <b th:text="${actividad.actividad.nombre}"></b></h3>
+                    </center><br>
+                    <div class="row">
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-8">
+                            <form th:action="@{/Horarios/Save}" method="POST" th:object="${horario}">
+                                <div class="form-group" style="margin-bottom: 1px">
+                                    <input type="hidden" class="form-control" name="id" id="id" th:field="*{idHorario}" required />
+                                    <input type="hidden" class="form-control" name="actividad" id="actividad" th:field="*{actividad}" required />
+                                </div>
+                                <div class="form-group" style="margin-bottom: 1px">
+                                    <label for="dia" style="margin: 0px">
+                                        Dia
+                                    </label>
+                                    <select class="form-control" name="dia" id="dia" th:field="*{dia}" required >
+                                        <option th:value="${'Lunes'}" th:text="${'Lunes'}"></option>
+                                        <option th:value="${'Martes'}" th:text="${'Martes'}"></option>
+                                        <option th:value="${'Miercoles'}" th:text="${'Miercoles'}"></option>
+                                        <option th:value="${'Jueves'}" th:text="${'Jueves'}"></option>
+                                        <option th:value="${'Viernes'}" th:text="${'Viernes'}"></option>
+                                        <option th:value="${'Sabado'}" th:text="${'Sabado'}"></option>
+                                        <option th:value="${'Domingo'}" th:text="${'Domingo'}"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 1px">
+                                    <label for="horaInicio" style="margin: 0px">
+                                        Hora Inicio
+                                    </label>
+                                    <input type="time" class="form-control" name="horaInicio" id="horaInicio" placeholder="Fecha Inicio" th:field="*{horaInicio}" required/>
+                                </div><div class="form-group" style="margin-bottom: 1px">
+                                    <label for="horaFin" style="margin: 0px">
+                                        Hora Fin
+                                    </label>
+                                    <input type="time" class="form-control" name="horaFin" id="horaFin" placeholder="Fecha Fin" th:field="*{horaFin}" required/>
+                                </div>
+                                <button type="submit" class="btn btn-primary" th:if="${horario.idHorario} == null or ${horario.dia} == null">
+                                    Registrar
+                                </button>
+                                <button type="submit" class="btn btn-primary" th:unless="${horario.idHorario} == null or ${horario.dia} == null">
+                                    Modificar
+                                </button>
+                                <button type="reset" class="btn btn-danger">
+                                    Limpiar
+                                </button>                                
+                            </form>
+                        </div>
+                        <div class="col-md-2">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
