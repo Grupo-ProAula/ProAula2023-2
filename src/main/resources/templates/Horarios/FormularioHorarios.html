@@ -13,7 +13,8 @@
                         </a>
                     </div>
                     <center>
-                        <h3>Registrar Horario Para <b th:text="${actividad.actividad.nombre}"></b></h3>
+                        <h3 th:if="${horario.idHorario == 0}">Registrar Horario Para <b th:text="${actividad.actividad.nombre}"></b></h3>
+                        <h3 th:unless="${horario.idHorario == 0}">Modificar Horario Para <b th:text="${actividad.actividad.nombre}"></b></h3>
                     </center><br>
                     <div class="row">
                         <div class="col-md-2">

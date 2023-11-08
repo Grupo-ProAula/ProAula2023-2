@@ -2,6 +2,7 @@
 package co.edu.unicolombo.ProyectoDeAula20232.Services;
 
 import co.edu.unicolombo.ProyectoDeAula20232.Models.Horarios;
+import java.util.Date;
 import java.util.List;
 
 public interface IHorarioServicios {
@@ -13,4 +14,6 @@ public interface IHorarioServicios {
     public void eliminarHorario(Horarios horario);
     
     public Horarios buscarHorario(Integer id);
+    
+    public Horarios buscarHorarioDatos(String dia, Date horaInicio, Date HoraFin, Integer idActividad);
 }
