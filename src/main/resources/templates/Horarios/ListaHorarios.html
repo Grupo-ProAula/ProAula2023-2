@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+    <head th:replace="plantillas/partes :: head"></head>
+    <body>
+        <header th:replace="plantillas/partes :: header"></header>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12"><br>
+                <div th:if="${actividad.idActividadProgramada != 0}">
+                    <center>
+                        <h3>Horarios De <b th:text="${actividad.actividad.nombre}"></b></h3>
+                    </center>
+                    <div class="row" th:if="${usuario.tipo == 'Administrador'}">
+                        <div class="col-md-2">	
+                            <a class="btn btn-block btn-primary" th:href="@{/ActividadesProgramadas}">
+                                Regresar
+                            </a>
+                        </div><br><br>
+                        <div class="col-md-8"></div>
+                        <div class="col-md-2">	
+                            <a class="btn btn-block btn-primary" th:href="@{/Horarios/Add/}+${actividad.idActividadProgramada}">
+                                Registrar Horario
+                            </a>
+                        </div><br><br>       
+                    </div>
+                    <div class="row" th:if="${usuario.tipo == 'Encargado'}">
+                        <div class="col-md-2">	
+                            <a class="btn btn-block btn-primary" th:href="@{/ActividadesProgramadas}">
+                                Regresar
+                            </a>
+                        </div><br><br>
+                    </div>
+                    <div class="row" th:if="${usuario.tipo == 'Estudiante'}">
+                        <div class="col-md-2">	
+                            <a class="btn btn-block btn-primary" th:href="@{/ActividadesProgramadas}">
+                                Regresar
+                            </a>
+                        </div><br><br>
+                    </div>
+                </div>
+                <div th:if="${horarios != null}">
+                    <table class="table table-bordered table-hover" id="tabla">
+                        <thead>
+                            <tr class="bg-primary">
+                                <th class="text-center">ACTIVIDAD</th>
+                                <th class="text-center">DIA</th>
+                                <th class="text-center">HORA INICIO</th>
+                                <th class="text-center">HORA FIN</th>
+                                <th class="text-center">ESTADO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="h: ${horarios}">
+                                <td th:text="${h.actividad.actividad.nombre}" class="text-center"></td>
+                                <td th:text="${h.dia}" class="text-center"></td>
+                                <td th:text="${#dates.format(h.horaInicio, 'HH:mm')}" class="text-center"></td>
+                                <td th:text="${#dates.format(h.horaFin, 'HH:mm')}" class="text-center"></td>
+                                <td th:text="${h.estado}" class="text-center"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

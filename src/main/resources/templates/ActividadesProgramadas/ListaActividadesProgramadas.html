@@ -41,7 +41,7 @@
                                 <td th:text="${ap.encargado.nombre}+' '+${ap.encargado.apellidos}" class="text-center"></td>
                                 <td th:text="${ap.estado}" class="text-center"></td>
                                 <td class="text-center" th:if="${usuario.tipo == 'Administrador'}">
-                                    <a class="btn btn-primary">Horarios</a>
+                                    <a class="btn btn-primary" th:href="@{/Horarios/}+${ap.idActividadProgramada}">Horarios</a>
                                     <a class="btn btn-warning" th:href="@{/Participaciones/Actividad/}+${ap.idActividadProgramada}">Inscripciones</a>
                                     <a class="btn btn-success" th:href="@{/Asistencias/Actividad/}+${ap.idActividadProgramada}">Asistencias</a>
                                     <a class="btn btn-info" th:href="@{/ActividadesProgramadas/Edit/}+${ap.idActividadProgramada}">Editar</a>
@@ -49,12 +49,12 @@
                                 </td>
                                 <td class="text-center" th:if="${usuario.tipo == 'Estudiante'}">
                                     <a class="btn btn-info" th:onclick="inscribirse([[${ap.idActividadProgramada}]],'/Participaciones/Enrol/','/ActividadesProgramadas')">Inscribirse</a>
-                                    <a class="btn btn-success">Horarios</a>
+                                    <a class="btn btn-success" th:href="@{/Horarios/}+${ap.idActividadProgramada}">Horarios</a>
                                 </td>
                                 <td class="text-center" th:if="${usuario.tipo == 'Encargado'}">
-                                    <a class="btn btn-success">Horarios</a>
+                                    <a class="btn btn-success" th:href="@{/Horarios/}+${ap.idActividadProgramada}">Horarios</a>
                                     <a class="btn btn-warning" th:href="@{/Participaciones/Actividad/}+${ap.idActividadProgramada}">Inscripciones</a>
-                                    <a class="btn btn-success" th:href="@{/Asistencias/Actividad/}+${ap.idActividadProgramada}">Asistencias</a>
+                                    <a class="btn btn-info" th:href="@{/Asistencias/Actividad/}+${ap.idActividadProgramada}">Asistencias</a>
                                 </td>
                             </tr>
                         </tbody>

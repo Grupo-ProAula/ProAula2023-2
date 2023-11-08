@@ -160,7 +160,7 @@ public class AsistenciaControlador {
         } catch (ParseException ex) {
             Logger.getLogger(AsistenciaControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return "redirect:/";
+        return "redirect:/Asistencias/Actividad/"+idActividad;
     }
     
     
