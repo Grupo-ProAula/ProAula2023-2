@@ -64,17 +64,29 @@ public class ProgramaControlador {
             return "redirect:/login";
         }
         try{
-            if(programa.getIdPrograma() == 0){
-                programService.guardarPrograma(programa);
-                atributos.addFlashAttribute("success", "Programa Registrado Exitosamente");
+            if(programa.getSemestresTotales() < 6){
+                modelo.addAttribute("usuario", logueado);
+                modelo.addAttribute("programa", programa);
+                modelo.addAttribute("danger", "Los semestres totales no puden ser menores a 4");
+                return "Programas/FormularioProgramas";
+            }else if(programa.getSemestresTotales() > 12){
+                modelo.addAttribute("usuario", logueado);
+                modelo.addAttribute("programa", programa);
+                modelo.addAttribute("danger", "Los semestres totales no puden ser mayores a 12");
+                return "Programas/FormularioProgramas";
             }else{
-                programService.guardarPrograma(programa);
-                atributos.addFlashAttribute("success", "Programa Modificado Exitosamente");
+                if(programa.getIdPrograma() == 0){
+                    programService.guardarPrograma(programa);
+                    atributos.addFlashAttribute("success", "Programa Registrado Exitosamente");
+                }else{
+                    programService.guardarPrograma(programa);
+                    atributos.addFlashAttribute("success", "Programa Modificado Exitosamente");
+                }
             }
         }catch(Exception ex){
             String mensaje="";
             if(ex.getMessage().contains("ConstraintViolationException")){
-                mensaje="Hubo Un Error";
+                mensaje="El Codigo Ingresado Ya existe";
             }else{
                 mensaje= ex.getMessage();
             }

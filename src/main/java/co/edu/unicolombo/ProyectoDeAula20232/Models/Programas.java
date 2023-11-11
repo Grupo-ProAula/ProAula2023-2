@@ -21,7 +21,7 @@ public class Programas implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idPrograma;
         
-    @Column(name = "codigoPrograma", nullable = false, length = 15)
+    @Column(name = "codigoPrograma", nullable = false, length = 15, unique = true)
     private String codigoPrograma;
     
     @Column(name = "nombre", nullable = false, length = 100)

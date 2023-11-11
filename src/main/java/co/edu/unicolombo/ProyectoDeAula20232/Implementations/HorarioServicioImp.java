@@ -4,7 +4,6 @@ package co.edu.unicolombo.ProyectoDeAula20232.Implementations;
 import co.edu.unicolombo.ProyectoDeAula20232.Dao.ICrudHorarios;
 import co.edu.unicolombo.ProyectoDeAula20232.Models.Horarios;
 import co.edu.unicolombo.ProyectoDeAula20232.Services.IHorarioServicios;
-import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,8 +35,8 @@ public class HorarioServicioImp implements IHorarioServicios{
     }
 
     @Override
-    public Horarios buscarHorarioDatos(String dia, Date horaInicio, Date HoraFin, Integer idActividad) {
-        return crudHorario.verificarHorario(dia, horaInicio, HoraFin, idActividad);
+    public Horarios buscarHorarioDatos(String dia, Integer idActividad) {
+        return crudHorario.verificarHorario(dia, idActividad);
     }
     
 }

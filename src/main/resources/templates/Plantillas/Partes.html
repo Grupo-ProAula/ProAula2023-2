@@ -33,32 +33,33 @@
                                     <li class="nav-item">
                                         <a class="nav-link" th:href="@{/}">Inicio</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:if="${usuario.tipo == 'Administrador'} OR ${usuario.tipo == 'Coordinador'}" th:href="@{/Estudiantes}">Estudiantes</a>
+                                    <li class="nav-item" th:if="${usuario.tipo == 'Administrador'} OR ${usuario.tipo == 'Coordinador'}">
+                                        <a class="nav-link" th:href="@{/Estudiantes}">Estudiantes</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:if="${usuario.tipo == 'Administrador'}" th:href="@{/Encargados}">Encargados</a>
+                                    <li class="nav-item" th:if="${usuario.tipo == 'Administrador'}">
+                                        <a class="nav-link" th:href="@{/Encargados}">Encargados</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:if="${usuario.tipo == 'Administrador'}" th:href="@{/Coordinadores}">Coordinadores</a>
+                                    <li class="nav-item" th:if="${usuario.tipo == 'Administrador'}">
+                                        <a class="nav-link" th:href="@{/Coordinadores}">Coordinadores</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:if="${usuario.tipo == 'Administrador'}" th:href="@{/Administradores}">Administradores</a>
+                                    <li class="nav-item" th:if="${usuario.tipo == 'Administrador'}">
+                                        <a class="nav-link" th:href="@{/Administradores}">Administradores</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:if="${usuario.tipo == 'Administrador'}" th:href="@{/Programas}">Programas</a>
+                                    <li class="nav-item" th:if="${usuario.tipo == 'Administrador'}" >
+                                        <a class="nav-link" th:href="@{/Programas}">Programas</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:if="${usuario.tipo == 'Administrador'}" th:href="@{/Actividades}">Actividades</a>
+                                    <li class="nav-item" th:if="${usuario.tipo == 'Administrador'}">
+                                        <a class="nav-link" th:href="@{/Actividades}">Actividades</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:if="${usuario.tipo == 'Administrador'} OR ${usuario.tipo == 'Encargado'} OR ${usuario.tipo == 'Estudiante'}" th:href="@{/ActividadesProgramadas}">Actividades Programadas</a>
+                                    <li class="nav-item" th:if="${usuario.tipo == 'Administrador'} OR ${usuario.tipo == 'Encargado'} OR ${usuario.tipo == 'Estudiante'}">
+                                        <a class="nav-link" th:if="${usuario.tipo == 'Encargado'}" th:href="@{/ActividadesProgramadas}">Actividades Asignadas</a>
+                                        <a class="nav-link" th:unless="${usuario.tipo == 'Encargado'}"th:href="@{/ActividadesProgramadas}">Actividades Programadas</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:if="${usuario.tipo == 'Estudiante'}" th:href="@{/Participaciones}">Actividades Inscritas</a>
+                                    <li class="nav-item" th:if="${usuario.tipo == 'Estudiante'}">
+                                        <a class="nav-link" th:href="@{/Participaciones}">Mis Actividades</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:if="${usuario.tipo == 'Estudiante'}" th:href="@{/Asistencias}">Asistencias</a>
+                                    <li class="nav-item" th:if="${usuario.tipo == 'Estudiante'}">
+                                        <a class="nav-link" th:href="@{/Asistencias}">Mis Asistencias</a>
                                     </li>
 				</ul>
 				<ul class="navbar-nav ml-md-auto">

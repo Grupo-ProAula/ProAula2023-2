@@ -83,7 +83,7 @@ public class HorarioControlador {
                 modelo.addAttribute("danger", "La Hora De Fin No Puede Ser Menor A La De Inicio");
                 return "Horarios/FormularioHorarios";
             }else{
-                Horarios h = horarioService.buscarHorarioDatos(horario.getDia(), horario.getHoraInicio(), horario.getHoraFin(), horario.getActividad().getIdActividadProgramada());
+                Horarios h = horarioService.buscarHorarioDatos(horario.getDia(), horario.getActividad().getIdActividadProgramada());
                 if(h == null){
                     if(horario.getIdHorario()== 0){
                         horario.setEstado("Activo");
@@ -98,7 +98,7 @@ public class HorarioControlador {
                     if(horario.getIdHorario() == h.getIdHorario()){
                         horarioService.guardarHorario(horario);
                     }else{
-                        throw new Exception("Esta actividad ya tiene un horario en el mismo dia y en las mismas horas");
+                        throw new Exception("Esta actividad ya tiene un horario en el dia seleccionado");
                     }               
                 }
             }
