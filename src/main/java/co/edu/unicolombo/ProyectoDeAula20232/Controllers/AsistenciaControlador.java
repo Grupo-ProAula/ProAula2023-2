@@ -12,12 +12,16 @@ import co.edu.unicolombo.ProyectoDeAula20232.Services.IAsistenciaServicios;
 import co.edu.unicolombo.ProyectoDeAula20232.Services.IEstudianteServicios;
 import co.edu.unicolombo.ProyectoDeAula20232.Services.IHorarioServicios;
 import co.edu.unicolombo.ProyectoDeAula20232.Services.IParticipacionesServicios;
+import co.edu.unicolombo.ProyectoDeAula20232.Util.AsistenciasExporterPDF;
+import java.io.IOException;
 import java.sql.Time;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -265,5 +269,43 @@ public class AsistenciaControlador {
         Date horas = new Date();
         horas.setTime(calDif.getTimeInMillis());
         return horas;
+    }
+    
+    @GetMapping("/Actividad/PDF/{idActividadProgramada}")
+    public void generarPDFAsistenciasActividad(@PathVariable(name="idActividadProgramada")int id, HttpServletResponse response) throws IOException{
+        ActividadesProgramadas ap = programActivityService.buscarActividadProgramada(id);
+        List<Asistencias> lista = asistenciaService.listarAsistencias(null, id);
+        String horasTotales = sumarHoras(lista);
+        response.setContentType("application/pdf");
+        
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String fecha = dateFormatter.format(new Date());
+        
+        String cabecera = "Content-Disposition";
+        String valor = "attachment; filename=Asistencias_"+ap.getActividad().getNombre()+"_"+fecha+".pdf";
+        
+        response.setHeader(cabecera, valor);
+        
+        AsistenciasExporterPDF exporter = new AsistenciasExporterPDF(lista, ap, null, horasTotales);
+        exporter.Exportar(response);
+    }
+    
+    @GetMapping("/Estudiante/PDF/{idUsuario}")
+    public void generarPDFAsistenciasEstudiante(@PathVariable(name="idUsuario")int id, HttpServletResponse response) throws IOException{
+        Estudiantes e = studentService.buscarEstudiante(id);
+        List<Asistencias> lista = asistenciaService.listarAsistencias(id, null);
+        String horasTotales = sumarHoras(lista);
+        response.setContentType("application/pdf");
+        
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String fecha = dateFormatter.format(new Date());
+        
+        String cabecera = "Content-Disposition";
+        String valor = "attachment; filename=Asistencias_"+e.getNombre()+"_"+e.getApellidos()+"_"+fecha+".pdf";
+        
+        response.setHeader(cabecera, valor);
+        
+        AsistenciasExporterPDF exporter = new AsistenciasExporterPDF(lista, null, e,horasTotales);
+        exporter.Exportar(response);
     }
 }

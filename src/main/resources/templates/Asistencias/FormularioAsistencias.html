@@ -33,8 +33,8 @@
                                         <div th:if="${participantes != null and !participantes.empty}" style="border: 1px solid black">
                                             <div class="Scroll" >
                                                 <div class="form-check" th:each="p : ${participantes}">
-                                                    <input class="form-check-input" type="checkbox" th:value="${p.idParticipante}" id="estudiante" name="estudiantes[]">
-                                                    <label class="form-check-label" for="estudiante">
+                                                    <input class="form-check-input" type="checkbox" th:value="${p.idParticipante}" th:id="${p.estudiante.idUsuario}+'_Estudiante'" name="estudiantes[]">
+                                                    <label class="form-check-label" th:for="${p.estudiante.idUsuario}+'_Estudiante'">
                                                         <h5 th:text="${p.estudiante.nombre}+' '+${p.estudiante.apellidos}"></h5>
                                                     </label>
                                                 </div>
@@ -57,7 +57,7 @@
                                             <label for="fechaAsistencia" style="margin: 0px">
                                                 Fecha Asistencia
                                             </label>
-                                            <input type="date" class="form-control" name="fechaAsistencia" id="fechaAsistencia" required />
+                                            <input type="date" th:attr="min=${#dates.format(actividad.fechaInicio, 'yyyy-MM-dd')}, max=${#dates.format(actividad.fechaFin, 'yyyy-MM-dd')}" class="form-control" name="fechaAsistencia" id="fechaAsistencia" required />
                                         </div><br>
                                         <button type="submit" class="btn btn-primary">
                                             Registrar

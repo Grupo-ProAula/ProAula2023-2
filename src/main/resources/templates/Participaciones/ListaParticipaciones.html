@@ -18,11 +18,16 @@
                             </a>
                         </div><br><br>
                         <div class="col-md-2" th:unless="${usuario.tipo != 'Estudiante'}">	
-                        </div><br><br>
+                        </div>
                         <div class="col-md-8">
                         </div>
-                        <div class="col-md-2">	
+                        <div class="col-md-2" th:if="${usuario.tipo == 'Estudiante'}">	
                             <a class="btn btn-block btn-secondary" th:href="@{/Participaciones/Estudiante/PDF/}+${usuario.idUsuario}">
+                                Imprimir PDF
+                            </a>
+                        </div>
+                        <div class="col-md-2" th:unless="${usuario.tipo == 'Estudiante'}">	
+                            <a class="btn btn-block btn-secondary" th:href="@{/Participaciones/Estudiante/PDF/}+${estudiante.idUsuario}">
                                 Imprimir PDF
                             </a>
                         </div>

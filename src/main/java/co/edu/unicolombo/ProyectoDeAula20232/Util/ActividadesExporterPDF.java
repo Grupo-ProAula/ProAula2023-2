@@ -8,7 +8,6 @@ import com.lowagie.text.Element;
 import com.lowagie.text.Font;
 import com.lowagie.text.FontFactory;
 import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
@@ -61,39 +60,69 @@ public class ActividadesExporterPDF {
         celda.setHorizontalAlignment(Element.ALIGN_CENTER);
         Font fuente = FontFactory.getFont(FontFactory.HELVETICA);
         fuente.setColor(Color.BLACK);
-        for(ActividadesProgramadas ap : listaActividades){
-            celda.setPhrase(new Phrase(ap.getPeriodo(), fuente));
+        if(listaActividades.isEmpty()){
+            celda.setPhrase(new Phrase("No Hay Programaciones En Esta Actividad", fuente));
+            celda.setColspan(5);
             tabla.addCell(celda);
-            celda.setPhrase(new Phrase(formato.format(ap.getFechaInicio()), fuente));
-            tabla.addCell(celda);
-            celda.setPhrase(new Phrase(formato.format(ap.getFechaFin()), fuente));
-            tabla.addCell(celda);
-            celda.setPhrase(new Phrase(ap.getEncargado().getNombre()+" "+ap.getEncargado().getApellidos(), fuente));
-            tabla.addCell(celda);
-            celda.setPhrase(new Phrase(ap.getEstado(), fuente));
-            tabla.addCell(celda);
+        }else{
+            for(ActividadesProgramadas ap : listaActividades){
+                celda.setPhrase(new Phrase(ap.getPeriodo(), fuente));
+                tabla.addCell(celda);
+                celda.setPhrase(new Phrase(formato.format(ap.getFechaInicio()), fuente));
+                tabla.addCell(celda);
+                celda.setPhrase(new Phrase(formato.format(ap.getFechaFin()), fuente));
+                tabla.addCell(celda);
+                celda.setPhrase(new Phrase(ap.getEncargado().getNombre()+" "+ap.getEncargado().getApellidos(), fuente));
+                tabla.addCell(celda);
+                celda.setPhrase(new Phrase(ap.getEstado(), fuente));
+                tabla.addCell(celda);
+            }
         }
     }
     
     public void Exportar(HttpServletResponse response) throws IOException{
-        Document documento = new Document(PageSize.A4);
+        Document documento = new Document(PageSize.A3);
         PdfWriter.getInstance(documento, response.getOutputStream());
         
         documento.open();
         
-        Font fuenteTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
-        fuenteTitulo.setColor(Color.BLACK);
-        fuenteTitulo.setSize(18);
+        Font fuenteCampo = FontFactory.getFont(FontFactory.HELVETICA_BOLD,11,Color.WHITE);
+        Font fuenteDato = FontFactory.getFont(FontFactory.HELVETICA_BOLD,11,Color.BLACK);
         
-        Paragraph titulo = new Paragraph("Actividades Programadas De "+actividad.getNombre(), fuenteTitulo);
-        titulo.setAlignment(Paragraph.ALIGN_CENTER);
-        documento.add(titulo);
+        PdfPCell celdaCampo = new PdfPCell();
+        PdfPCell celdaDato = new PdfPCell();
+        
+        celdaCampo.setBackgroundColor(Color.GRAY);
+        celdaCampo.setPadding(4);
+        celdaCampo.setVerticalAlignment(Element.ALIGN_LEFT);
+        celdaCampo.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+        celdaDato.setPadding(4);
+        celdaDato.setVerticalAlignment(Element.ALIGN_LEFT);
+        celdaDato.setHorizontalAlignment(Element.ALIGN_LEFT);
+        
+        PdfPTable tablaActividad = new PdfPTable(4);
+        tablaActividad.setWidthPercentage(100);
+        tablaActividad.setSpacingBefore(15);
+        tablaActividad.setWidths(new float[]{3f,6.75f,2.6f,7.15f});
+        tablaActividad.setWidthPercentage(100);
+
+        celdaCampo.setPhrase(new Phrase("Actividad:", fuenteCampo));
+        tablaActividad.addCell(celdaCampo);
+        celdaDato.setPhrase(new Phrase(actividad.getNombre(), fuenteDato));
+        tablaActividad.addCell(celdaDato);
+
+        celdaCampo.setPhrase(new Phrase("Categoria:", fuenteCampo));
+        tablaActividad.addCell(celdaCampo);
+        celdaDato.setPhrase(new Phrase(actividad.getTipo(), fuenteDato));
+        tablaActividad.addCell(celdaDato);
+
+        documento.add(tablaActividad);
                         
         PdfPTable tabla = new PdfPTable(5);
-        tabla.setWidthPercentage(100);
-        tabla.setSpacingBefore(15);
+        tabla.setSpacingBefore(30);
         tabla.setWidths(new float[]{3f,2.3f,2.3f,4f,2.5f});
-        tabla.setWidthPercentage(110);
+        tabla.setWidthPercentage(100);
         
         cabeceraTabla(tabla);
         datosTabla(tabla);
