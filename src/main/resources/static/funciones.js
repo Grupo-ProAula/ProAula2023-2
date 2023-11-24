@@ -78,6 +78,7 @@ function desinscribirse(id, urlDesinscripcion, url){
 
 $(document).ready(function() {
     var tabla = $('#tabla').DataTable( {
+        "responsive": true,
         "language": {
             "lengthMenu": "Mostrando _MENU_ Registros Por Pagina",
             "zeroRecords": "No Hay Coincidencias",
@@ -97,6 +98,7 @@ $(document).ready(function() {
     var tabla2 = $('#tabla2').DataTable( {
         "dom": 'lrtip',
         "searching": true, 
+        "responsive": true,
         "language": {
             "lengthMenu": "Mostrando _MENU_ Registros Por Pagina",
             "zeroRecords": "No Hay Coincidencias",

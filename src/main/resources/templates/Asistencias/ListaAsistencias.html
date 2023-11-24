@@ -8,16 +8,25 @@
             <div class="row">
                 <div class="col-md-12"><br>
                 <div th:if="${estudiante.idUsuario != 0}">
-                    <div class="row" th:if="${usuario.tipo != 'Estudiante'}">
-                        <div class="col-md-2">	
+                    <center>
+                        <h3>Asistencias De <b th:text="${estudiante.nombre}+' '+${estudiante.apellidos}"></b></h3> 
+                    </center>  
+                    <div class="row" >
+                        <div class="col-md-2" th:if="${usuario.tipo != 'Estudiante'}">	
                             <a class="btn btn-block btn-primary" th:href="@{/Estudiantes}">
                                 Regresar
                             </a>
                         </div><br><br>
-                    </div>
-                    <center>
-                        <h3>Asistencias De <b th:text="${estudiante.nombre}+' '+${estudiante.apellidos}"></b></h3> 
-                    </center>     
+                        <div class="col-md-2" th:unless="${usuario.tipo != 'Estudiante'}">	
+                        </div>
+                        <div class="col-md-8">
+                        </div>
+                        <div class="col-md-2">	
+                            <a class="btn btn-block btn-secondary" th:href="@{/Asistencias/Estudiante/PDF/}+${estudiante.idUsuario}">
+                                Imprimir PDF
+                            </a>
+                        </div>
+                    </div> 
                 </div>
                 <div th:if="${actividad.idActividadProgramada != 0}">
                     <center>
@@ -34,7 +43,13 @@
                             <a class="btn btn-block btn-primary" th:href="@{/Asistencias/Add/}+${actividad.idActividadProgramada}">
                                 Registrar Asistencia
                             </a>
-                        </div><br><br>       
+                        </div>    
+                        <div class="col-md-10"></div>
+                        <div class="col-md-2">	
+                            <a class="btn btn-block btn-secondary" th:href="@{/Asistencias/Actividad/PDF/}+${actividad.idActividadProgramada}">
+                                Imprimir PDF
+                            </a>
+                        </div><br><br>
                     </div>
                     <div class="row" th:if="${usuario.tipo != 'Encargado'}">
                         <div class="col-md-2">	
@@ -42,6 +57,13 @@
                                 Regresar
                             </a>
                         </div><br><br>
+                        <div class="col-md-8">
+                        </div>
+                        <div class="col-md-2">	
+                            <a class="btn btn-block btn-secondary" th:href="@{/Asistencias/Actividad/PDF/}+${actividad.idActividadProgramada}">
+                                Imprimir PDF
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div th:if="${asistencias != null}">

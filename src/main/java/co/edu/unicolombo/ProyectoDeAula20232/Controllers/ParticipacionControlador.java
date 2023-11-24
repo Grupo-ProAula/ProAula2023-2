@@ -158,7 +158,7 @@ public class ParticipacionControlador {
     
     @GetMapping("/Estudiante/PDF/{idUsuario}")
     public void generarPDFInscripcionesEstudiante(@PathVariable(name="idUsuario")int id, HttpServletResponse response) throws IOException{
-        Estudiantes e = studentService.buscarEstudiante(id);
+        Estudiantes estudiante = (Estudiantes) studentService.buscarEstudiante(id);
         List<Participaciones> lista = participanteService.listarParticipaciones(id, null,null);
         response.setContentType("application/pdf");
         
@@ -166,11 +166,11 @@ public class ParticipacionControlador {
         String fecha = dateFormatter.format(new Date());
         
         String cabecera = "Content-Disposition";
-        String valor = "attachment; filename=Inscripciones_"+e.getNombre()+"_"+e.getApellidos()+"_"+fecha+".pdf";
+        String valor = "attachment; filename=Inscripciones_"+estudiante.getNombre()+"_"+estudiante.getApellidos()+"_"+fecha+".pdf";
         
         response.setHeader(cabecera, valor);
         
-        ParticipacionesExporterPDF exporter = new ParticipacionesExporterPDF(lista, null, e);
+        ParticipacionesExporterPDF exporter = new ParticipacionesExporterPDF(lista, null, estudiante);
         exporter.Exportar(response);
     }
 }

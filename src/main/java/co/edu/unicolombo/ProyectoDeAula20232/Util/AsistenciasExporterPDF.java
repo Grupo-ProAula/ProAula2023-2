@@ -2,8 +2,8 @@
 package co.edu.unicolombo.ProyectoDeAula20232.Util;
 
 import co.edu.unicolombo.ProyectoDeAula20232.Models.ActividadesProgramadas;
+import co.edu.unicolombo.ProyectoDeAula20232.Models.Asistencias;
 import co.edu.unicolombo.ProyectoDeAula20232.Models.Estudiantes;
-import co.edu.unicolombo.ProyectoDeAula20232.Models.Participaciones;
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
@@ -19,16 +19,18 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
-public class ParticipacionesExporterPDF {
+public class AsistenciasExporterPDF {
     
-    List<Participaciones> lista;
+    List<Asistencias> lista;
     ActividadesProgramadas actividad;
     Estudiantes estudiante;
+    String horasTotales;
 
-    public ParticipacionesExporterPDF(List<Participaciones> lista, ActividadesProgramadas actividad, Estudiantes estudiante) {
+    public AsistenciasExporterPDF(List<Asistencias> lista, ActividadesProgramadas actividad, Estudiantes estudiante, String horasTotales) {
         this.lista = lista;
         this.actividad = actividad;
         this.estudiante = estudiante;
+        this.horasTotales = horasTotales;
     }
     
     public void Exportar(HttpServletResponse response) throws IOException{
@@ -36,7 +38,7 @@ public class ParticipacionesExporterPDF {
         PdfWriter.getInstance(documento, response.getOutputStream());
         
         documento.open();
-        
+                
         Font fuenteCampo = FontFactory.getFont(FontFactory.HELVETICA_BOLD,11,Color.WHITE);
         Font fuenteDato = FontFactory.getFont(FontFactory.HELVETICA_BOLD,11,Color.BLACK);
         
@@ -111,15 +113,52 @@ public class ParticipacionesExporterPDF {
             
             documento.add(tablaActividad);
         }
+                
+        PdfPTable tablaHoras = new PdfPTable(3);
+        tablaHoras.setWidthPercentage(100);
+        tablaHoras.setSpacingBefore(30);
+        tablaHoras.setWidths(new float[]{13.5f,3f,3f});
+        tablaHoras.setWidthPercentage(100);
+        
+        Font fuenteHoras = FontFactory.getFont(FontFactory.HELVETICA_BOLD,10,Color.WHITE);
+        Font fuenteHorasTotales = FontFactory.getFont(FontFactory.HELVETICA_BOLD,10,Color.BLACK);
+        
+        PdfPCell celdaVacia = new PdfPCell(new Phrase());
+        PdfPCell celdaHoras = new PdfPCell();
+        PdfPCell celdaHorasTotales = new PdfPCell();
+        
+        celdaVacia.setBorder(0);
+        
+        celdaHoras.setBackgroundColor(Color.GRAY);
+        celdaHoras.setPhrase(new Phrase("Horas Totales:", fuenteHoras));
+        celdaHoras.setPadding(4);
+        celdaHoras.setVerticalAlignment(Element.ALIGN_CENTER);
+        celdaHoras.setHorizontalAlignment(Element.ALIGN_CENTER);
+        
+        celdaHorasTotales.setPhrase(new Phrase(horasTotales, fuenteHorasTotales));
+        celdaHorasTotales.setPadding(4);
+        celdaHorasTotales.setVerticalAlignment(Element.ALIGN_CENTER);
+        celdaHorasTotales.setHorizontalAlignment(Element.ALIGN_CENTER);
+        
+        tablaHoras.addCell(celdaVacia);
+        tablaHoras.addCell(celdaHoras);
+        tablaHoras.addCell(celdaHorasTotales);
                                 
-        PdfPTable tabla = new PdfPTable(7);
-        tabla.setSpacingBefore(30);
-        tabla.setWidths(new float[]{2.5f,2.5f,3f,3f,2.5f,4f,2.5f});
-        tabla.setWidthPercentage(100);
+        PdfPTable tabla = null;
+        if(actividad == null){
+            tabla = new PdfPTable(7);
+            tabla.setWidths(new float[]{3f,2.5f,2.5f,3f,2.5f,3f,3f});
+            tabla.setWidthPercentage(100);
+        }else{
+            tabla = new PdfPTable(6);
+            tabla.setWidths(new float[]{2.5f,2.5f,4.3f,4.2f,3f,3f});
+            tabla.setWidthPercentage(100);
+        }
         
         cabeceraTabla(tabla);
         datosTabla(tabla);
         
+        documento.add(tablaHoras);
         documento.add(tabla);
         documento.close();
     }
@@ -131,7 +170,7 @@ public class ParticipacionesExporterPDF {
         celda.setVerticalAlignment(Element.ALIGN_CENTER);
         celda.setHorizontalAlignment(Element.ALIGN_CENTER);
         
-        Font fuente = FontFactory.getFont(FontFactory.HELVETICA,10,Color.WHITE);
+        Font fuente = FontFactory.getFont(FontFactory.HELVETICA_BOLD,10,Color.WHITE);
         
         if(actividad == null){
             celda.setPhrase(new Phrase("Actividad", fuente));
@@ -144,9 +183,9 @@ public class ParticipacionesExporterPDF {
             tabla.addCell(celda);
             celda.setPhrase(new Phrase("Fecha Fin", fuente));
             tabla.addCell(celda);
-            celda.setPhrase(new Phrase("Encargado", fuente));
+            celda.setPhrase(new Phrase("Fecha Asistencia", fuente));
             tabla.addCell(celda);
-            celda.setPhrase(new Phrase("Fecha Inscripcion", fuente));
+            celda.setPhrase(new Phrase("Horas Asistidas", fuente));
             tabla.addCell(celda);
         }else{
             celda.setPhrase(new Phrase("Cedula", fuente));
@@ -157,17 +196,16 @@ public class ParticipacionesExporterPDF {
             tabla.addCell(celda);
             celda.setPhrase(new Phrase("Programa", fuente));
             tabla.addCell(celda);
-            celda.setPhrase(new Phrase("Semestre", fuente));
+            celda.setPhrase(new Phrase("Fecha Asistencia", fuente));
             tabla.addCell(celda);
-            celda.setPhrase(new Phrase("Correo", fuente));
-            tabla.addCell(celda);
-            celda.setPhrase(new Phrase("Fecha Inscripcion", fuente));
+            celda.setPhrase(new Phrase("Horas Asistidas", fuente));
             tabla.addCell(celda);
         }        
     }
     
     private void datosTabla(PdfPTable tabla){
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formatoHoras = new SimpleDateFormat("HH:mm");
         PdfPCell celda = new PdfPCell();
         celda.setPadding(4);
         celda.setVerticalAlignment(Element.ALIGN_CENTER);
@@ -175,51 +213,48 @@ public class ParticipacionesExporterPDF {
         Font fuente = FontFactory.getFont(FontFactory.HELVETICA,10,Color.BLACK);
         if(lista.isEmpty()){
             if(actividad == null){
-                celda.setPhrase(new Phrase("El Estudiante No Esta Inscrito En Ninguna Actividad", fuente));
+                celda.setPhrase(new Phrase("El Estudiante No Tiene Asistencias Registradas", fuente));
                 celda.setColspan(7);
                 tabla.addCell(celda);
             }else{
-                celda.setPhrase(new Phrase("No Hay Estudiantes Inscritos En Esta Actividad", fuente));
-                celda.setColspan(7);
+                celda.setPhrase(new Phrase("No Hay Asistencias Registradas En Esta Actividad", fuente));
+                celda.setColspan(6);
                 tabla.addCell(celda);
             }
         }else{
             if(actividad == null){
-                for(Participaciones p : lista){
-                    celda.setPhrase(new Phrase(p.getActividadProgramada().getActividad().getNombre(), fuente));
+                for(Asistencias a : lista){
+                    celda.setPhrase(new Phrase(a.getParticipacion().getActividadProgramada().getActividad().getNombre(), fuente));
                     tabla.addCell(celda);
-                    celda.setPhrase(new Phrase(p.getActividadProgramada().getActividad().getTipo(), fuente));
+                    celda.setPhrase(new Phrase(a.getParticipacion().getActividadProgramada().getActividad().getTipo(), fuente));
                     tabla.addCell(celda);
-                    celda.setPhrase(new Phrase(p.getActividadProgramada().getPeriodo(), fuente));
+                    celda.setPhrase(new Phrase(a.getParticipacion().getActividadProgramada().getPeriodo(), fuente));
                     tabla.addCell(celda);
-                    celda.setPhrase(new Phrase(formato.format(p.getActividadProgramada().getFechaInicio()), fuente));
+                    celda.setPhrase(new Phrase(formato.format(a.getParticipacion().getActividadProgramada().getFechaInicio()), fuente));
                     tabla.addCell(celda);
-                    celda.setPhrase(new Phrase(formato.format(p.getActividadProgramada().getFechaFin()), fuente));
+                    celda.setPhrase(new Phrase(formato.format(a.getParticipacion().getActividadProgramada().getFechaFin()), fuente));
                     tabla.addCell(celda);
-                    celda.setPhrase(new Phrase(p.getActividadProgramada().getEncargado().getNombre()+" "+p.getActividadProgramada().getEncargado().getApellidos(), fuente));
+                    celda.setPhrase(new Phrase(formato.format(a.getFechaAsistencia()), fuente));
                     tabla.addCell(celda);
-                    celda.setPhrase(new Phrase(formato.format(p.getFechaInscripcion()), fuente));
+                    celda.setPhrase(new Phrase(formatoHoras.format(a.getHorasAsistidas()), fuente));
                     tabla.addCell(celda);
                 }
             }else{
-                for(Participaciones p : lista){
-                    celda.setPhrase(new Phrase(p.getEstudiante().getCedula(), fuente));
+                for(Asistencias a : lista){
+                    celda.setPhrase(new Phrase(a.getParticipacion().getEstudiante().getCedula(), fuente));
                     tabla.addCell(celda);
-                    celda.setPhrase(new Phrase(p.getEstudiante().getCodigoEstudiantil(), fuente));
+                    celda.setPhrase(new Phrase(a.getParticipacion().getEstudiante().getCodigoEstudiantil(), fuente));
                     tabla.addCell(celda);
-                    celda.setPhrase(new Phrase(p.getEstudiante().getNombre()+" "+p.getEstudiante().getApellidos(), fuente));
+                    celda.setPhrase(new Phrase(a.getParticipacion().getEstudiante().getNombre()+" "+a.getParticipacion().getEstudiante().getApellidos(), fuente));
                     tabla.addCell(celda);
-                    celda.setPhrase(new Phrase(p.getEstudiante().getPrograma().getNombre(), fuente));
+                    celda.setPhrase(new Phrase(a.getParticipacion().getEstudiante().getPrograma().getNombre(), fuente));
                     tabla.addCell(celda);
-                    celda.setPhrase(new Phrase(p.getEstudiante().getSemestre()+"", fuente));
+                    celda.setPhrase(new Phrase(formato.format(a.getFechaAsistencia()), fuente));
                     tabla.addCell(celda);
-                    celda.setPhrase(new Phrase(p.getEstudiante().getCorreo(), fuente));
-                    tabla.addCell(celda);
-                    celda.setPhrase(new Phrase(formato.format(p.getFechaInscripcion()), fuente));
+                    celda.setPhrase(new Phrase(formatoHoras.format(a.getHorasAsistidas()), fuente));
                     tabla.addCell(celda);
                 }
             }
         }
-        
     }
 }
